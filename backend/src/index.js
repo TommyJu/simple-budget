@@ -4,6 +4,7 @@ import "./lib/env.js";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import pool from "./lib/db.js"
 
 const app = express();
 app.use(cors());
@@ -11,7 +12,7 @@ app.use(express.json());
 app.use(helmet());
 
 app.get("/", (req, res) => {
-  res.send("PERN backend running 🚀");
+  res.send("backend running");
 });
 
 const PORT = process.env.PORT || 5000;
