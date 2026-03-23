@@ -6,7 +6,7 @@ interface ThemeStore {
   setTheme: (theme: string) => void;
 }
 
-export const useThemeStore = create<ThemeStore>((set) => ({
+const useThemeStore = create<ThemeStore>((set) => ({
     theme: localStorage.getItem("theme") || DEFAULT_THEME,
     
     setTheme: (theme) => {
@@ -14,3 +14,5 @@ export const useThemeStore = create<ThemeStore>((set) => ({
         set({ theme });
     }
 }));
+
+export default useThemeStore;
