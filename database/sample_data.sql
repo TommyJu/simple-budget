@@ -1,8 +1,8 @@
-INSERT INTO users (email, password)
+INSERT INTO users (username, hashed_password)
 VALUES
-  ('alice@example.com', 'hashed_pw_1'),
-  ('bob@example.com', 'hashed_pw_2'),
-  ('carol@example.com', 'hashed_pw_3');
+  ('alice', 'hashed_pw_1'),
+  ('bob', 'hashed_pw_2'),
+  ('carol', 'hashed_pw_3');
 
 INSERT INTO months (date, income, needs_percentage, wants_percentage, savings_percentage, current, user_id)
 VALUES

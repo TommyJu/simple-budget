@@ -1,3 +1,6 @@
+-- Extensions
+CREATE EXTENSION IF NOT EXISTS citext;
+
 -- Drop tables if they exist
 DROP TABLE IF EXISTS transactions CASCADE;
 DROP TABLE IF EXISTS fixed_expenses CASCADE;
@@ -10,7 +13,7 @@ CREATE TYPE expense_category AS ENUM ('needs', 'wants', 'savings');
 -- Users table
 CREATE TABLE users (
   id BIGSERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
+  username CITEXT UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
