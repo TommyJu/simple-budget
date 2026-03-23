@@ -1,12 +1,7 @@
 import { create } from "zustand";
 import { DEFAULT_THEME } from "@/constants/themes";
 
-interface ThemeStore {
-  theme: string;
-  setTheme: (theme: string) => void;
-}
-
-const useThemeStore = create<ThemeStore>((set) => ({
+const useThemeStore = create ((set) => ({
     theme: localStorage.getItem("theme") || DEFAULT_THEME,
     
     setTheme: (theme) => {

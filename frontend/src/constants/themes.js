@@ -33,4 +33,4 @@ export const THEMES = [
   "dim",
   "nord",
   "sunset",
-] as const;
+];
