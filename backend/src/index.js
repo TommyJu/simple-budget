@@ -1,9 +1,9 @@
 // Loads environment variables first so other modules can use them safely.
 import "./lib/env.js";
-import moduleAlias from ""
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.route.js"
 

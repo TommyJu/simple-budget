@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import pool from "../db.js";
+import pool from "../lib/db.js";
 import { sendErrorResponse, throwError } from "../utils/errorHandling.js";
 
 
