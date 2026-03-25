@@ -40,7 +40,7 @@ const checkUsernameLength = (userName) => {
 };
 
 // Check if username is unique in the DB
-const checkUsernameUnique = async (userName) => {
+export const checkUsernameUnique = async (userName) => {
   try {
     const { rowCount } = await pool.query(
       "SELECT username FROM users WHERE username = $1",
@@ -61,7 +61,6 @@ export const validateAuthInput = async (userName, password) => {
   checkEmptyFields(userName, password);
   checkPasswordLength(password);
   checkUsernameLength(userName);
-  await checkUsernameUnique(userName);
 };
 
 export const hashPassword = async (password) => {

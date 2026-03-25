@@ -3,7 +3,8 @@ import {
   validateAuthInput,
   hashPassword,
   createAndSaveUser,
-  getUserId
+  getUserId,
+  checkUsernameUnique
 } from "../services/auth.service.js";
 import { sendErrorResponse } from "../utils/errorHandling.js";
 
@@ -11,6 +12,7 @@ export const signup = async (req, res) => {
   const { userName, password } = req.body;
   try {
     await validateAuthInput(userName, password);
+    await checkUsernameUnique(userName);
 
     const hashedPassword = await hashPassword(password);
 
