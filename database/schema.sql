@@ -14,7 +14,7 @@ CREATE TYPE expense_category AS ENUM ('needs', 'wants', 'savings');
 CREATE TABLE users (
   id BIGSERIAL PRIMARY KEY,
   username CITEXT UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
+  hashed_password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
