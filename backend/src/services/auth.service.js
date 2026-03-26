@@ -9,8 +9,8 @@ import {
 import { throwError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
-const checkEmptyFields = (userName, password) => {
-  if (!userName.trim() || !password.trim()) {
+const checkEmptyFields = (username, password) => {
+  if (!username.trim() || !password.trim()) {
     throwError("All fields are required.", 400);
   }
 };
@@ -27,10 +27,10 @@ const checkPasswordLength = (password) => {
   }
 };
 
-const checkUsernameLength = (userName) => {
+const checkUsernameLength = (username) => {
   if (
-    userName.length < MIN_USERNAME_LENGTH ||
-    userName.length > MAX_USERNAME_LENGTH
+    username.length < MIN_USERNAME_LENGTH ||
+    username.length > MAX_USERNAME_LENGTH
   ) {
     throwError(
       `Username must be between ${MIN_USERNAME_LENGTH} and ${MAX_USERNAME_LENGTH} characters.`,
@@ -40,11 +40,11 @@ const checkUsernameLength = (userName) => {
 };
 
 // Check if username is unique in the DB
-export const checkUsernameUnique = async (userName) => {
+export const checkUsernameUnique = async (username) => {
   try {
     const { rowCount } = await pool.query(
       "SELECT username FROM users WHERE username = $1",
-      [userName],
+      [username],
     );
 
     if (rowCount !== 0) {
@@ -57,10 +57,10 @@ export const checkUsernameUnique = async (userName) => {
 };
 
 // Enforces non-empty fields within length bounds, and unique usernames
-export const validateAuthInput = async (userName, password) => {
-  checkEmptyFields(userName, password);
+export const validateAuthInput = async (username, password) => {
+  checkEmptyFields(username, password);
   checkPasswordLength(password);
-  checkUsernameLength(userName);
+  checkUsernameLength(username);
 };
 
 export const hashPassword = async (password) => {
@@ -69,13 +69,13 @@ export const hashPassword = async (password) => {
   return hashedPassword;
 };
 
-export const createAndSaveUser = async (userName, hashedPassword) => {
+export const createAndSaveUser = async (username, hashedPassword) => {
   const query = `
         INSERT INTO users (username, hashed_password)
         VALUES ($1, $2)
         RETURNING id
     `;
-  const values = [userName, hashedPassword];
+  const values = [username, hashedPassword];
 
   try {
     const { rows } = await pool.query(query, values);
@@ -86,11 +86,11 @@ export const createAndSaveUser = async (userName, hashedPassword) => {
   }
 };
 
-export const getUserId = async (userName) => {
+export const getUserId = async (username) => {
     const query = `
         SELECT id FROM users WHERE username = $1
     `;
-  const values = [userName];
+  const values = [username];
   try {
     const { rows, rowCount} = await pool.query(query, values);
     if (rowCount < 1) {

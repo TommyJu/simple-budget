@@ -9,19 +9,19 @@ import {
 import { sendErrorResponse } from "../utils/errorHandling.js";
 
 export const signup = async (req, res) => {
-  const { userName, password } = req.body;
+  const { username, password } = req.body;
   try {
-    await validateAuthInput(userName, password);
-    await checkUsernameUnique(userName);
+    await validateAuthInput(username, password);
+    await checkUsernameUnique(username);
 
     const hashedPassword = await hashPassword(password);
 
-    const newUserId = await createAndSaveUser(userName, hashedPassword);
+    const newUserId = await createAndSaveUser(username, hashedPassword);
 
     setJwtCookie(newUserId, res);
     res.status(201).json({
       id: newUserId,
-      userName,
+      username,
     });
   } catch (error) {
     sendErrorResponse(res, error, "auth controller signup");
@@ -29,16 +29,16 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { userName, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    await validateAuthInput(userName, password);
-    const userId = await getUserId(userName);
+    await validateAuthInput(username, password);
+    const userId = await getUserId(username);
 
     setJwtCookie(userId, res);
     res.status(200).json({
       id: userId,
-      userName,
+      username,
     });
   } catch (error) {
     sendErrorResponse(res, error, "auth controller login");
