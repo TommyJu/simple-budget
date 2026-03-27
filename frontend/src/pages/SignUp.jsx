@@ -20,12 +20,24 @@ export const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center p-8 h-dvh">
-      <h1 className="indie-flower-regular text-7xl mb-24 text-primary">
-        Simple Budget
-      </h1>
+    <div className="flex flex-col justify-center items-center p-4 h-dvh">
+      <div className="flex flex-col items-center mb-12">
+        <video
+          src="/coin.webm"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-40 h-auto "
+        />
+        <h1 className="indie-flower-regular text-7xl text-primary text-center">
+          Simple Budget
+        </h1>
+        
+      </div>
+
       <form onSubmit={handleSubmit}>
-        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-4">
+        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 w-75 sm:w-sm md:w-md lg:w-lg">
           <legend className="fieldset-legend text-xl">Create an Account</legend>
 
           <label className="label">Username</label>
