@@ -1,18 +1,16 @@
 import { setJwtCookie } from "../lib/authToken.js";
 import {
-  validateAuthInput,
+  validateLogIn,
+  validateSignUp,
   hashPassword,
   createAndSaveUser,
-  getUserId,
-  checkUsernameUnique,
 } from "../services/auth.service.js";
 import { sendErrorResponse } from "../utils/errorHandling.js";
 
 export const signup = async (req, res) => {
   const { username, password } = req.body;
   try {
-    await validateAuthInput(username, password);
-    await checkUsernameUnique(username);
+    await validateSignUp(username, password);
 
     const hashedPassword = await hashPassword(password);
 
@@ -32,14 +30,15 @@ export const login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    await validateAuthInput(username, password);
-    const userId = await getUserId(username);
+    const userId = await validateLogIn(username, password);
 
-    setJwtCookie(userId, res);
-    res.status(200).json({
-      id: userId,
-      username,
-    });
+    if (userId) {
+      setJwtCookie(userId, res);
+      res.status(200).json({
+        id: userId,
+        username,
+      });
+    }
   } catch (error) {
     sendErrorResponse(res, error, "auth controller login");
   }

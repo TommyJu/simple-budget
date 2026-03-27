@@ -40,7 +40,7 @@ const checkUsernameLength = (username) => {
 };
 
 // Check if username is unique in the DB
-export const checkUsernameUnique = async (username) => {
+const checkUsernameUnique = async (username) => {
   try {
     const { rowCount } = await pool.query(
       "SELECT username FROM users WHERE username = $1",
@@ -56,11 +56,37 @@ export const checkUsernameUnique = async (username) => {
   }
 };
 
+const checkLoginCredentials = async (username, password) => {
+  const { rowCount, rows } = await pool.query(
+    "SELECT hashed_password, id FROM users WHERE username = $1", [username]
+  );
+  if (rowCount < 1) {
+    throwError("User does not exist", 404);
+  }
+  const hashedPassword = rows[0].hashed_password;
+  const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
+  if (!isPasswordCorrect) {
+    throwError("Invalid credentials", 400);
+  }
+  const userId = rows[0].id;
+  return userId;
+}
+
 // Enforces non-empty fields within length bounds, and unique usernames
-export const validateAuthInput = async (username, password) => {
+export const validateSignUp = async (username, password) => {
   checkEmptyFields(username, password);
   checkPasswordLength(password);
   checkUsernameLength(username);
+  await checkUsernameUnique(username);
+};
+
+export const validateLogIn = async (username, password) => {
+  checkEmptyFields(username, password);
+  checkPasswordLength(password);
+  checkUsernameLength(username);
+  const userId = await checkLoginCredentials(username, password);
+  return userId;
+
 };
 
 export const hashPassword = async (password) => {
@@ -83,22 +109,5 @@ export const createAndSaveUser = async (username, hashedPassword) => {
   } catch (error) {
     console.error("Database error in createAndSaveUser:", error);
     throwError("Internal server error from createAndSaveUser", 500);
-  }
-};
-
-export const getUserId = async (username) => {
-    const query = `
-        SELECT id FROM users WHERE username = $1
-    `;
-  const values = [username];
-  try {
-    const { rows, rowCount} = await pool.query(query, values);
-    if (rowCount < 1) {
-        throwError("User not found.", 404);
-    }
-    return rows[0].id;
-  } catch (error) {
-    console.error("Database error in getUserId:", error);
-    throwError("Internal server error from getUserId", 500);
   }
 };
