@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import useThemeStore from "@/store/theme/useThemeStore";
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import useAuthStore from "@/store/auth/useAuthStore";
 
 import Landing from "@/pages/Landing";
 import Login from "@/pages/Login";
@@ -23,7 +24,7 @@ function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
 if (isCheckingAuth && !authUser) {
     return (
@@ -34,8 +35,7 @@ if (isCheckingAuth && !authUser) {
   }
 
   return (
-    <div className="h-dvh flex flex-col pt-16">
-
+    <div>
       <Routes>
         <Route
           path="/"

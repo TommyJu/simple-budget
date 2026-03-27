@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import { authService } from "@/services/authService";
+import authService from "@/services/authService";
 import { handleToastErrorMessage } from "@/lib/utils";
 
-const useAuthStore = create((set, get) => ({
+const useAuthStore = create((set) => ({
   authUser: null,
   isCheckingAuth: true,
   isSigningUp: false,
@@ -15,7 +15,11 @@ const useAuthStore = create((set, get) => ({
       set({ authUser: response.data });
     } catch (error) {
       set({ authUser: null });
-      console.error("Error in checkAuth: ", error);
+      if (error.response?.status === 401) {
+        console.info("User is not authenticated")
+      } else {
+        console.error("Error in checkAuth: ", error);
+      }
     } finally {
       set({ isCheckingAuth: false });
     }

@@ -4,7 +4,7 @@ import {
   hashPassword,
   createAndSaveUser,
   getUserId,
-  checkUsernameUnique
+  checkUsernameUnique,
 } from "../services/auth.service.js";
 import { sendErrorResponse } from "../utils/errorHandling.js";
 
