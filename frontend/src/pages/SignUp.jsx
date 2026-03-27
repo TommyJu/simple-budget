@@ -6,9 +6,10 @@ import {
   MIN_USERNAME_LENGTH,
   MAX_USERNAME_LENGTH,
 } from "../../../shared/auth.constants";
+import { Loader2 } from "lucide-react";
 
 export const SignUp = () => {
-  const { signup } = useAuthStore();
+  const { signup, isSigningUp } = useAuthStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -20,7 +21,9 @@ export const SignUp = () => {
 
   return (
     <div className="flex flex-col justify-center items-center p-8 h-dvh">
-      <h1 className="indie-flower-regular text-7xl mb-24 text-primary">Simple Budget</h1>
+      <h1 className="indie-flower-regular text-7xl mb-24 text-primary">
+        Simple Budget
+      </h1>
       <form onSubmit={handleSubmit}>
         <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-sm border p-4">
           <legend className="fieldset-legend text-xl">Create an Account</legend>
@@ -45,7 +48,9 @@ export const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <div className="flex justify-between">
-            <a href="/login" className="opacity-80 hover:opacity-100 underline">Already have an account?</a>
+            <a href="/login" className="opacity-80 hover:opacity-100 underline">
+              Already have an account?
+            </a>
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -57,8 +62,16 @@ export const SignUp = () => {
             </label>
           </div>
 
-          <button type="submit" className="btn btn-secondary mt-4">
-            Sign Up
+          <button
+            type="submit"
+            className="btn btn-secondary mt-4"
+            disabled={isSigningUp}
+          >
+            {isSigningUp ? (
+              <Loader2 className="size-5 animate-spin" />
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </fieldset>
       </form>

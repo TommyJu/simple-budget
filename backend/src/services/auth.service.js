@@ -52,7 +52,7 @@ export const checkUsernameUnique = async (username) => {
     }
   } catch (error) {
     console.error("Database error in checkUsernameUnique:", error);
-    throwError("Internal server error from checkUsernameUnique", 500);
+    throwError("That username already exists", 500);
   }
 };
 

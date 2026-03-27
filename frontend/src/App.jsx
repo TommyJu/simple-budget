@@ -26,7 +26,7 @@ function App() {
     checkAuth();
   }, []);
 
-if (isCheckingAuth && !authUser) {
+  if (isCheckingAuth && !authUser) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader className="size-10 animate-spin" />
@@ -43,7 +43,7 @@ if (isCheckingAuth && !authUser) {
         />
         <Route
           path="/signup"
-          element={authUser ? <Navigate to="/" /> : <SignUp/>}
+          element={authUser ? <Navigate to="/" /> : <SignUp />}
         />
         <Route
           path="/login"
@@ -51,11 +51,19 @@ if (isCheckingAuth && !authUser) {
         />
         <Route
           path="/monthly-details"
-          element={authUser ? <MonthlyDetails /> : <Navigate to="/" /> }
+          element={authUser ? <MonthlyDetails /> : <Navigate to="/" />}
         />
       </Routes>
 
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          className: "rounded-lg border border-base-content p-4 shadow-lg",
+          style: {
+            background: "var(--bs-base-300)",
+            color: "var(--bs-base-content)",
+          },
+        }}
+      />
     </div>
   );
 }
