@@ -1,4 +1,4 @@
-export const DEFAULT_THEME = "luxury";
+export const DEFAULT_THEME = "dark";
 
 export const THEMES = [
   "light",
