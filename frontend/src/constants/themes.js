@@ -1,4 +1,4 @@
-export const DEFAULT_THEME = "forest";
+export const DEFAULT_THEME = "luxury";
 
 export const THEMES = [
   "light",

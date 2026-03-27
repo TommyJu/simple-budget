@@ -20,7 +20,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center p-8 h-dvh">
+    <div className="flex flex-col justify-center items-center p-4 sm:p-8 min-h-dvh">
       <div className="flex flex-col items-center mb-12">
         <video
           src="/coin.webm"
@@ -28,16 +28,16 @@ export const Login = () => {
           loop
           muted
           playsInline
-          className="w-40 h-auto "
+          className="w-30 sm:w-40 h-auto"
         />
-        <h1 className="indie-flower-regular text-7xl text-primary text-center">
+        <h1 className="indie-flower-regular text-6xl sm:text-7xl text-primary text-center">
           Simple Budget
         </h1>
         
       </div>
       <form onSubmit={handleSubmit}>
-        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 w-75 sm:w-sm md:w-md lg:w-lg">
-          <legend className="fieldset-legend text-xl">Log In to an Existing Account</legend>
+        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box border p-4 sm:w-md lg:w-lg">
+          <legend className="fieldset-legend text-lg sm:text-xl">Log In to an Existing Account</legend>
 
           <label className="label">Username</label>
           <input
@@ -58,11 +58,11 @@ export const Login = () => {
             maxLength={MAX_PASSWORD_LENGTH}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div className="flex justify-between">
+          <div className="flex flex-wrap-reverse justify-between gap-4">
             <a href="/signup" className="opacity-80 hover:opacity-100 underline">
               Need to create an account?
             </a>
-            <label className="flex items-center gap-2">
+            <label className="flex items-center">
               <input
                 type="checkbox"
                 checked={showPassword}
