@@ -26,7 +26,6 @@ CREATE TABLE months (
   needs_percentage INT NOT NULL CHECK (needs_percentage >= 0 AND needs_percentage <= 100),
   wants_percentage INT NOT NULL CHECK (wants_percentage >= 0 AND wants_percentage <= 100),
   savings_percentage INT NOT NULL CHECK (savings_percentage >= 0 AND savings_percentage <= 100),
-  current BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 );

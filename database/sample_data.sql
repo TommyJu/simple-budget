@@ -4,12 +4,12 @@ VALUES
   ('bob', 'hashed_pw_2'),
   ('carol', 'hashed_pw_3');
 
-INSERT INTO months (date, income, needs_percentage, wants_percentage, savings_percentage, current, user_id)
+INSERT INTO months (date, income, needs_percentage, wants_percentage, savings_percentage, user_id)
 VALUES
-  ('2026-01-01', 5000.00, 50, 30, 20, false, 1),
-  ('2026-02-01', 5200.00, 50, 30, 20, true, 1),
-  ('2026-01-01', 4000.00, 60, 25, 15, false, 2),
-  ('2026-02-01', 4200.00, 60, 25, 15, true, 2);
+  ('2026-01-01', 5000.00, 50, 30, 20, 1),
+  ('2026-02-01', 5200.00, 50, 30, 20, 1),
+  ('2026-01-01', 4000.00, 60, 25, 15, 2),
+  ('2026-02-01', 4200.00, 60, 25, 15, 2);
 
 INSERT INTO fixed_expenses (amount, category, description, user_id)
 VALUES
