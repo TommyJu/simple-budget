@@ -6,6 +6,7 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.route.js"
+import monthRoutes from "./routes/month.route.js"
 
 const app = express();
 app.use(cors(
@@ -19,6 +20,7 @@ app.use(helmet());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/month", monthRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
