@@ -19,7 +19,7 @@ export const addMonthToDB = async (
     INSERT INTO months 
       (date, income, needs_percentage, wants_percentage, savings_percentage, user_id)
     VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING id
+    RETURNING id, date, income, needs_percentage, wants_percentage, savings_percentage, user_id, created_at
   `;
   const values = [
     date,
@@ -32,7 +32,7 @@ export const addMonthToDB = async (
 
   try {
     const { rows } = await pool.query(query, values);
-    return rows[0].id;
+    return rows[0];
   } catch (error) {
     // Handle unique violation
     if (error.code === "23505") {

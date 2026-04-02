@@ -6,7 +6,7 @@ export const createMonth = async (req, res) => {
     req.body;
   const userId = req.userId;
   try {
-    const monthId = await addMonthToDB(
+    const newMonth = await addMonthToDB(
       date,
       income,
       needsPercentage,
@@ -14,7 +14,7 @@ export const createMonth = async (req, res) => {
       savingsPercentage,
       userId,
     );
-    res.status(201).json({ monthId });
+    res.status(201).json(newMonth);
   } catch (error) {
     sendErrorResponse(res, error, "month controller create month");
   }
@@ -24,7 +24,7 @@ export const getMonths = async (req, res) => {
   const userId = req.userId;
   try {
     const months = await getMonthsFromDB(userId);
-    res.status(200).json({ months });
+    res.status(200).json(months);
   } catch (error) {
     sendErrorResponse(res, error, "month controller get months");
   }
