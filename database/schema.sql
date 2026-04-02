@@ -28,6 +28,13 @@ CREATE TABLE months (
   savings_percentage INT NOT NULL CHECK (savings_percentage >= 0 AND savings_percentage <= 100),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
+
+  CHECK ((needs_percentage + wants_percentage + savings_percentage) = 100)
+  CHECK (
+    date = date_trunc('month', date)::date
+  ),
+  UNIQUE (user_id, date)
+
 );
 
 -- Fixed expenses table

@@ -10,7 +10,7 @@ import { throwError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
 const checkEmptyFields = (username, password) => {
-  if (!username.trim() || !password.trim()) {
+  if (!username || !password || !username.trim() || !password.trim()) {
     throwError("All fields are required.", 400);
   }
 };
