@@ -21,10 +21,19 @@ export const addMonthToDB = async (
     userId,
   ];
   try {
+    // Input validation for business logic
+    if (needsPercentage + wantsPercentage + savingsPercentage !== 100) {
+      throwError("Percentages must total 100.", 422);
+    }
+
     const { rows } = await pool.query(query, values);
     return rows[0].id;
   } catch (error) {
-    console.error("Database error in addMonthToDB:", error);
-    throwError("Internal server error from addMonthToDB", 500);
+    if (error.code === "23505") {
+      throwError("Month already exists for this user.", 409);
+    } else {
+      console.error("Database error in addMonthToDB:", error);
+      throwError("Internal server error from addMonthToDB", 500);
+    }
   }
 };
