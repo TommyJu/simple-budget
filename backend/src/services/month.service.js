@@ -9,9 +9,18 @@ export const addMonthToDB = async (
   savingsPercentage,
   userId,
 ) => {
-  const query = `INSERT into MONTHS (date, income, needs_percentage, wants_percentage, savings_percentage, user_id)
+  // Input validation
+  if (!userId) throwError("No user ID given", 400);
+  if (needsPercentage + wantsPercentage + savingsPercentage !== 100) {
+    throwError("Percentages must total 100.", 422);
+  }
+
+  const query = `
+    INSERT INTO months 
+      (date, income, needs_percentage, wants_percentage, savings_percentage, user_id)
     VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING id`;
+    RETURNING id
+  `;
   const values = [
     date,
     income,
@@ -20,20 +29,34 @@ export const addMonthToDB = async (
     savingsPercentage,
     userId,
   ];
-  try {
-    // Input validation for business logic
-    if (needsPercentage + wantsPercentage + savingsPercentage !== 100) {
-      throwError("Percentages must total 100.", 422);
-    }
 
+  try {
     const { rows } = await pool.query(query, values);
     return rows[0].id;
   } catch (error) {
+    // Handle unique violation
     if (error.code === "23505") {
       throwError("Month already exists for this user.", 409);
-    } else {
-      console.error("Database error in addMonthToDB:", error);
-      throwError("Internal server error from addMonthToDB", 500);
     }
+
+    // Unexpected DB error
+    console.error("Database error in addMonthToDB:", error);
+    throwError("Internal server error", 500);
+  }
+};
+
+export const getMonthsFromDB = async (userId) => {
+  if (!userId) throwError("No user ID given", 400);
+
+  const query = `SELECT * FROM months WHERE user_id = $1`;
+  const values = [userId];
+
+  try {
+    const { rows } = await pool.query(query, values);
+    return rows; // empty array if no months
+  } catch (error) {
+    // Unexpected DB error
+    console.error("Database error in getMonthsFromDB:", error);
+    throwError("Internal server error", 500);
   }
 };
