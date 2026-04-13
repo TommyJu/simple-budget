@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import pool from "../lib/db.js";
-import { sendErrorResponse, throwError } from "../utils/errorHandling.js";
+import { throwError } from "../utils/errorHandling.js";
 
 // Verifies the user's auth token and saves userId for subsequent requests
 export const protectRoute = async (req, res, next) => {
@@ -11,7 +11,7 @@ export const protectRoute = async (req, res, next) => {
     req.userId = userId;
     next();
   } catch (error) {
-    sendErrorResponse(res, error, "authentication middleware protectRoute");
+    next(error);
   }
 };
 
@@ -32,7 +32,7 @@ const findUserIdUsingAuthToken = async (authToken) => {
   }
 
   const userId = await findUserId(decodedToken);
-  return userId
+  return userId;
   
 };
 

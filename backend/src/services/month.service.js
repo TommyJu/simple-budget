@@ -2,27 +2,24 @@ import { throwError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
 export const addMonthToDB = async (
-  date,
+  year,
+  month,
   income,
   needsPercentage,
   wantsPercentage,
   savingsPercentage,
   userId,
 ) => {
-  // Input validation
-  if (!userId) throwError("No user ID given", 400);
-  if (needsPercentage + wantsPercentage + savingsPercentage !== 100) {
-    throwError("Percentages must total 100.", 422);
-  }
 
   const query = `
     INSERT INTO months 
-      (date, income, needs_percentage, wants_percentage, savings_percentage, user_id)
-    VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING id, date, income, needs_percentage, wants_percentage, savings_percentage, user_id, created_at
+      (year, month, income, needs_percentage, wants_percentage, savings_percentage, user_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *
   `;
   const values = [
-    date,
+    year,
+    month,
     income,
     needsPercentage,
     wantsPercentage,

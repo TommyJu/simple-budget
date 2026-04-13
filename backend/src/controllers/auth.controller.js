@@ -5,8 +5,6 @@ import {
   hashPassword,
   createAndSaveUser,
 } from "../services/auth.service.js";
-import { sendErrorResponse } from "../utils/errorHandling.js";
-
 
 // Creates a new user given valid credentials in the HTTP request
 export const signup = async (req, res, next) => {
@@ -28,25 +26,22 @@ export const signup = async (req, res, next) => {
   }
 };
 
-// Log in an existing user give nvaid credntials in the HTTP request
+// Log in an existing user given valid credntials in the HTTP request
 export const login = async (req, res, next) => {
   const { username, password } = req.body;
 
   try {
     const userId = await validateLogIn(username, password);
 
-    if (userId) {
-      setJwtCookie(userId, res);
-      res.status(200).json({
-        id: userId,
-        username,
-      });
-    }
+    setJwtCookie(userId, res);
+    res.status(200).json({
+      id: userId,
+      username,
+    });
   } catch (error) {
     next(error);
   }
 };
-
 
 // Expires the user's JWT token to log them out.
 export const logout = (req, res, next) => {

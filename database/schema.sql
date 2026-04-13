@@ -21,7 +21,8 @@ CREATE TABLE users (
 -- Months table
 CREATE TABLE months (
   id BIGSERIAL PRIMARY KEY,
-  date DATE NOT NULL,
+  year INT NOT NULL CHECK (year >= 2000),
+  month INT NOT NULL CHECK (month BETWEEN 1 AND 12),
   income DECIMAL(10,2) NOT NULL,
   needs_percentage INT NOT NULL CHECK (needs_percentage >= 0 AND needs_percentage <= 100),
   wants_percentage INT NOT NULL CHECK (wants_percentage >= 0 AND wants_percentage <= 100),
@@ -29,11 +30,8 @@ CREATE TABLE months (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id BIGINT REFERENCES users(id) ON DELETE CASCADE
 
-  CHECK ((needs_percentage + wants_percentage + savings_percentage) = 100)
-  CHECK (
-    date = date_trunc('month', date)::date
-  ),
-  UNIQUE (user_id, date)
+  CHECK ((needs_percentage + wants_percentage + savings_percentage) = 100),
+  UNIQUE (user_id, year, month)
 
 );
 

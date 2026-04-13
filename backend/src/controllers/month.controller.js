@@ -1,18 +1,17 @@
 import { addMonthToDB, getMonthsFromDB, editMonthInDB, deleteMonthFromDB } from "../services/month.service.js";
-import { sendErrorResponse } from "../utils/errorHandling.js";
 
 // Creates a new monthly budget
 export const createMonth = async (req, res, next) => {
-  const { date, income, needsPercentage, wantsPercentage, savingsPercentage } =
-    req.body;
+  const data = req.validated;
   const userId = req.userId;
   try {
     const newMonth = await addMonthToDB(
-      date,
-      income,
-      needsPercentage,
-      wantsPercentage,
-      savingsPercentage,
+      data.year,
+      data.month,
+      data.income,
+      data.needsPercentage,
+      data.wantsPercentage,
+      data.savingsPercentage,
       userId,
     );
     res.status(201).json(newMonth);
