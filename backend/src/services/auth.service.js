@@ -9,6 +9,49 @@ import {
 import { throwError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
+// Enforces non-empty fields within length bounds, and unique usernames
+export const validateSignUp = async (username, password) => {
+  checkEmptyFields(username, password);
+  checkPasswordLength(password);
+  checkUsernameLength(username);
+  await checkUsernameUnique(username);
+};
+
+// Enforces valid credentials for an existing user
+export const validateLogIn = async (username, password) => {
+  checkEmptyFields(username, password);
+  checkPasswordLength(password);
+  checkUsernameLength(username);
+  const userId = await checkLoginCredentials(username, password);
+  return userId;
+};
+
+export const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(NUM_SALT_ROUNDS_FOR_PASSWORD_HASH);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+};
+
+// Creates a new user in the database
+export const createAndSaveUser = async (username, hashedPassword) => {
+  const query = `
+        INSERT INTO users (username, hashed_password)
+        VALUES ($1, $2)
+        RETURNING id
+    `;
+  const values = [username, hashedPassword];
+
+  try {
+    const { rows } = await pool.query(query, values);
+    const newUserId = rows[0].id;
+    return newUserId;
+  } catch (error) {
+    console.error("Database error in createAndSaveUser:", error);
+    throwError("Internal server error from createAndSaveUser", 500);
+  }
+};
+
+// HELPER FUNCTIONS
 
 const checkEmptyFields = (username, password) => {
   if (!username || !password || !username.trim() || !password.trim()) {
@@ -40,7 +83,6 @@ const checkUsernameLength = (username) => {
   }
 };
 
-// Check if username is unique in the DB
 const checkUsernameUnique = async (username) => {
   try {
     const { rowCount } = await pool.query(
@@ -59,7 +101,8 @@ const checkUsernameUnique = async (username) => {
 
 const checkLoginCredentials = async (username, password) => {
   const { rowCount, rows } = await pool.query(
-    "SELECT hashed_password, id FROM users WHERE username = $1", [username]
+    "SELECT hashed_password, id FROM users WHERE username = $1",
+    [username],
   );
   if (rowCount < 1) {
     throwError("User does not exist", 404);
@@ -71,46 +114,4 @@ const checkLoginCredentials = async (username, password) => {
   }
   const userId = rows[0].id;
   return userId;
-}
-
-// Enforces non-empty fields within length bounds, and unique usernames
-export const validateSignUp = async (username, password) => {
-  checkEmptyFields(username, password);
-  checkPasswordLength(password);
-  checkUsernameLength(username);
-  await checkUsernameUnique(username);
-};
-
-// Enforces valid credentials for an existing user
-export const validateLogIn = async (username, password) => {
-  checkEmptyFields(username, password);
-  checkPasswordLength(password);
-  checkUsernameLength(username);
-  const userId = await checkLoginCredentials(username, password);
-  return userId;
-
-};
-
-export const hashPassword = async (password) => {
-  const salt = await bcrypt.genSalt(NUM_SALT_ROUNDS_FOR_PASSWORD_HASH);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  return hashedPassword;
-};
-
-// Creates a new user in the database
-export const createAndSaveUser = async (username, hashedPassword) => {
-  const query = `
-        INSERT INTO users (username, hashed_password)
-        VALUES ($1, $2)
-        RETURNING id
-    `;
-  const values = [username, hashedPassword];
-
-  try {
-    const { rows } = await pool.query(query, values);
-    return rows[0].id;
-  } catch (error) {
-    console.error("Database error in createAndSaveUser:", error);
-    throwError("Internal server error from createAndSaveUser", 500);
-  }
 };

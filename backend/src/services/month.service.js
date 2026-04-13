@@ -62,6 +62,7 @@ export const getMonthsFromDB = async (userId) => {
 };
 
 export async function editMonthInDB(monthId, userId, monthData) {
+  if (!userId) throwError("No user ID given", 400);
   const { income, needsPercentage, wantsPercentage, savingsPercentage } =
     monthData;
   // Input validation
@@ -89,7 +90,7 @@ export async function editMonthInDB(monthId, userId, monthData) {
     wantsPercentage,
     savingsPercentage,
     monthId,
-    userId
+    userId,
   ];
 
   try {
@@ -105,6 +106,7 @@ export async function editMonthInDB(monthId, userId, monthData) {
 }
 
 export async function deleteMonthFromDB(monthId, userId) {
+  if (!userId) throwError("No user ID given", 400);
   if (!monthId) {
     throwError("Month ID is required", 400);
   }
@@ -124,7 +126,7 @@ export async function deleteMonthFromDB(monthId, userId) {
       throwError("Month not found", 404);
     }
 
-    return rows[0]; // deleted month (useful for confirmation/UI)
+    return rows[0];
   } catch (error) {
     console.error("Database error in deleteMonthFromDB:", error);
     throwError("Internal server error", 500);
