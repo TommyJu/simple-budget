@@ -1,4 +1,9 @@
-import { addMonthToDB, getMonthsFromDB, editMonthInDB, deleteMonthFromDB } from "../services/month.service.js";
+import {
+  addMonthToDB,
+  getMonthsFromDB,
+  editMonthInDB,
+  deleteMonthFromDB,
+} from "../services/month.service.js";
 
 // Creates a new monthly budget
 export const createMonth = async (req, res, next) => {
@@ -32,32 +37,32 @@ export const getMonths = async (req, res, next) => {
 };
 
 export async function editMonth(req, res, next) {
-  const {
-    monthId,
-    monthData
-  } = req.body;
-
   const userId = req.userId;
+  const data = req.validated;
 
   try {
-    const editedMonth = await editMonthInDB(monthId, userId, monthData);
+    const editedMonth = await editMonthInDB(      
+      userId,
+      data.monthId,
+      data.income,
+      data.needsPercentage,
+      data.wantsPercentage,
+      data.savingsPercentage,
+    );
     res.status(200).json(editedMonth);
   } catch (error) {
     next(error);
   }
-};
+}
 
 export async function deleteMonth(req, res, next) {
-  const {
-    monthId
-  } = req.body;
-
   const userId = req.userId;
+  const data = req.validated;
 
-    try {
-    const deletedMonth = await deleteMonthFromDB(monthId, userId);
+  try {
+    const deletedMonth = await deleteMonthFromDB(data.monthId, userId);
     res.status(200).json(deletedMonth);
   } catch (error) {
     next(error);
   }
-};
+}

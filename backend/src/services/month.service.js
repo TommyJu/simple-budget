@@ -10,7 +10,6 @@ export const addMonthToDB = async (
   savingsPercentage,
   userId,
 ) => {
-
   const query = `
     INSERT INTO months 
       (year, month, income, needs_percentage, wants_percentage, savings_percentage, user_id)
@@ -52,24 +51,19 @@ export const getMonthsFromDB = async (userId) => {
     const { rows } = await pool.query(query, values);
     return rows; // empty array if no months
   } catch (error) {
-    // Unexpected DB error
     console.error("Database error in getMonthsFromDB:", error);
     throwError("Internal server error", 500);
   }
 };
 
-export async function editMonthInDB(monthId, userId, monthData) {
-  if (!userId) throwError("No user ID given", 400);
-  const { income, needsPercentage, wantsPercentage, savingsPercentage } =
-    monthData;
-  // Input validation
-  if (needsPercentage + wantsPercentage + savingsPercentage !== 100) {
-    throwError("Percentages must add up to 100", 422);
-  }
-  if (income < 0) {
-    throwError("Monthly income must be a positive number", 400);
-  }
-
+export async function editMonthInDB(
+  userId,
+  monthId,
+  income,
+  needsPercentage,
+  wantsPercentage,
+  savingsPercentage,
+) {
   const query = `
     UPDATE months
     SET 
@@ -103,10 +97,6 @@ export async function editMonthInDB(monthId, userId, monthData) {
 }
 
 export async function deleteMonthFromDB(monthId, userId) {
-  if (!userId) throwError("No user ID given", 400);
-  if (!monthId) {
-    throwError("Month ID is required", 400);
-  }
 
   const query = `
     DELETE FROM months
