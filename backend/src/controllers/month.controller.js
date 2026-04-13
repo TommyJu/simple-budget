@@ -2,7 +2,7 @@ import { addMonthToDB, getMonthsFromDB, editMonthInDB, deleteMonthFromDB } from 
 import { sendErrorResponse } from "../utils/errorHandling.js";
 
 // Creates a new monthly budget
-export const createMonth = async (req, res) => {
+export const createMonth = async (req, res, next) => {
   const { date, income, needsPercentage, wantsPercentage, savingsPercentage } =
     req.body;
   const userId = req.userId;
@@ -17,22 +17,22 @@ export const createMonth = async (req, res) => {
     );
     res.status(201).json(newMonth);
   } catch (error) {
-    sendErrorResponse(res, error, "month controller create month");
+    next(error);
   }
 };
 
 // Gets all monthly budgets for the currently authenticated user
-export const getMonths = async (req, res) => {
+export const getMonths = async (req, res, next) => {
   const userId = req.userId;
   try {
     const months = await getMonthsFromDB(userId);
     res.status(200).json(months);
   } catch (error) {
-    sendErrorResponse(res, error, "month controller get months");
+    next(error);
   }
 };
 
-export async function editMonth(req, res) {
+export async function editMonth(req, res, next) {
   const {
     monthId,
     monthData
@@ -44,11 +44,11 @@ export async function editMonth(req, res) {
     const editedMonth = await editMonthInDB(monthId, userId, monthData);
     res.status(200).json(editedMonth);
   } catch (error) {
-    sendErrorResponse(res, error, "month controller edit month");
+    next(error);
   }
 };
 
-export async function deleteMonth(req, res) {
+export async function deleteMonth(req, res, next) {
   const {
     monthId
   } = req.body;
@@ -59,6 +59,6 @@ export async function deleteMonth(req, res) {
     const deletedMonth = await deleteMonthFromDB(monthId, userId);
     res.status(200).json(deletedMonth);
   } catch (error) {
-    sendErrorResponse(res, error, "month controller delete month");
+    next(error);
   }
 };

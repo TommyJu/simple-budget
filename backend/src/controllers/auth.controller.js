@@ -9,7 +9,7 @@ import { sendErrorResponse } from "../utils/errorHandling.js";
 
 
 // Creates a new user given valid credentials in the HTTP request
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   const { username, password } = req.body;
   try {
     await validateSignUp(username, password);
@@ -24,12 +24,12 @@ export const signup = async (req, res) => {
       username,
     });
   } catch (error) {
-    sendErrorResponse(res, error, "auth controller signup");
+    next(error);
   }
 };
 
 // Log in an existing user give nvaid credntials in the HTTP request
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const { username, password } = req.body;
 
   try {
@@ -43,26 +43,26 @@ export const login = async (req, res) => {
       });
     }
   } catch (error) {
-    sendErrorResponse(res, error, "auth controller login");
+    next(error);
   }
 };
 
 
 // Expires the user's JWT token to log them out.
-export const logout = (req, res) => {
+export const logout = (req, res, next) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully." });
   } catch (error) {
-    sendErrorResponse(res, error, "auth controller logout");
+    next(error);
   }
 };
 
 // Checks that the user is authenticated by seeing if the userId is set from the auth middleware
-export const checkAuth = (req, res) => {
+export const checkAuth = (req, res, next) => {
   try {
     res.status(200).json(req.userId);
   } catch (error) {
-    sendErrorResponse(res, error, "auth controller check auth");
+    next(error);
   }
 };
