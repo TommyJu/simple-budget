@@ -60,3 +60,73 @@ export const getMonthsFromDB = async (userId) => {
     throwError("Internal server error", 500);
   }
 };
+
+export async function editMonthInDB(monthId, userId, monthData) {
+  const { income, needsPercentage, wantsPercentage, savingsPercentage } =
+    monthData;
+  // Input validation
+  if (needsPercentage + wantsPercentage + savingsPercentage !== 100) {
+    throwError("Percentages must add up to 100", 422);
+  }
+  if (income < 0) {
+    throwError("Monthly income must be a positive number", 400);
+  }
+
+  const query = `
+    UPDATE months
+    SET 
+      income = $1,
+      needs_percentage = $2,
+      wants_percentage = $3,
+      savings_percentage = $4
+    WHERE id = $5 AND user_id = $6
+    RETURNING *;
+  `;
+
+  const values = [
+    income,
+    needsPercentage,
+    wantsPercentage,
+    savingsPercentage,
+    monthId,
+    userId
+  ];
+
+  try {
+    const { rows, rowCount } = await pool.query(query, values);
+    if (rowCount < 1) {
+      throwError("Month not found", 404);
+    }
+    return rows[0]; // updated month
+  } catch (error) {
+    console.error("Database error in editMonthInDB:", error);
+    throwError("Internal server error", 500);
+  }
+}
+
+export async function deleteMonthFromDB(monthId, userId) {
+  if (!monthId) {
+    throwError("Month ID is required", 400);
+  }
+
+  const query = `
+    DELETE FROM months
+    WHERE id = $1 AND user_id = $2
+    RETURNING *;
+  `;
+
+  const values = [monthId, userId];
+
+  try {
+    const { rows, rowCount } = await pool.query(query, values);
+
+    if (rowCount < 1) {
+      throwError("Month not found", 404);
+    }
+
+    return rows[0]; // deleted month (useful for confirmation/UI)
+  } catch (error) {
+    console.error("Database error in deleteMonthFromDB:", error);
+    throwError("Internal server error", 500);
+  }
+}
