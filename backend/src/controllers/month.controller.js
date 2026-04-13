@@ -1,6 +1,7 @@
 import { addMonthToDB, getMonthsFromDB } from "../services/month.service.js";
 import { sendErrorResponse } from "../utils/errorHandling.js";
 
+// Creates a new monthly budget
 export const createMonth = async (req, res) => {
   const { date, income, needsPercentage, wantsPercentage, savingsPercentage } =
     req.body;
@@ -20,6 +21,7 @@ export const createMonth = async (req, res) => {
   }
 };
 
+// Gets all monthly budgets for the currently authenticated user
 export const getMonths = async (req, res) => {
   const userId = req.userId;
   try {

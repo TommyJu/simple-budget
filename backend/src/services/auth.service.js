@@ -9,6 +9,7 @@ import {
 import { throwError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
+
 const checkEmptyFields = (username, password) => {
   if (!username || !password || !username.trim() || !password.trim()) {
     throwError("All fields are required.", 400);
@@ -80,6 +81,7 @@ export const validateSignUp = async (username, password) => {
   await checkUsernameUnique(username);
 };
 
+// Enforces valid credentials for an existing user
 export const validateLogIn = async (username, password) => {
   checkEmptyFields(username, password);
   checkPasswordLength(password);
@@ -95,6 +97,7 @@ export const hashPassword = async (password) => {
   return hashedPassword;
 };
 
+// Creates a new user in the database
 export const createAndSaveUser = async (username, hashedPassword) => {
   const query = `
         INSERT INTO users (username, hashed_password)

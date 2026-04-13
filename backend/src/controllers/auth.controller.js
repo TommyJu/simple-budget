@@ -7,6 +7,8 @@ import {
 } from "../services/auth.service.js";
 import { sendErrorResponse } from "../utils/errorHandling.js";
 
+
+// Creates a new user given valid credentials in the HTTP request
 export const signup = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -26,6 +28,7 @@ export const signup = async (req, res) => {
   }
 };
 
+// Log in an existing user give nvaid credntials in the HTTP request
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -44,9 +47,10 @@ export const login = async (req, res) => {
   }
 };
 
+
+// Expires the user's JWT token to log them out.
 export const logout = (req, res) => {
   try {
-    // Expires the user's JWT token to log them out.
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logged out successfully." });
   } catch (error) {
@@ -54,6 +58,7 @@ export const logout = (req, res) => {
   }
 };
 
+// Checks that the user is authenticated by seeing if the userId is set from the auth middleware
 export const checkAuth = (req, res) => {
   try {
     res.status(200).json(req.userId);
