@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/auth.route.js"
 import monthRoutes from "./routes/month.route.js"
+import transactionRoutes from "./routes/transaction.route.js"
 import { sendErrorResponse } from "./utils/errorHandling.js";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/month", monthRoutes);
+app.use("/api/transaction", transactionRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

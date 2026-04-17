@@ -1,19 +1,21 @@
-export const throwError = (message, statusCode) => {
-  const error = new Error(message);
-  error.status = statusCode;
-  throw error;
-};
+export class AppError extends Error {
+  constructor(message, statusCode = 500) {
+    super(message);
+    this.statusCode = statusCode;
+
+    // Remove the constructor from the stack trace
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
 
 export const sendErrorResponse = (res, error, context = "") => {
-  // Log unexpected errors
-  if (!error.status) {
-    console.error(`Unexpected error${context ? " in " + context : ""}:`, error);
-  } else {
-    // Log expected errors minimally
+  if (error instanceof AppError) {
     console.info(`Error${context ? " in " + context : ""}:`, error.message);
+  } else {
+    console.error(`Unexpected error${context ? " in " + context : ""}:`, error);
   }
 
-  res.status(error.status || 500).json({
+  res.status(error.statusCode || 500).json({
     message: error.message || "Internal server error",
   });
 };

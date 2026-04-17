@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import pool from "../lib/db.js";
-import { throwError } from "../utils/errorHandling.js";
+import { AppError } from "../utils/errorHandling.js";
 
 // Verifies the user's auth token and saves userId for subsequent requests
 export const protectRoute = async (req, res, next) => {
@@ -20,7 +20,7 @@ export const protectRoute = async (req, res, next) => {
 // Gets userId from valid auth token
 const findUserIdUsingAuthToken = async (authToken) => {
   if (!authToken) {
-    throwError("Unauthorized, no token provided.", 401);
+    throw new AppError("Unauthorized, no token provided.", 401);
   }
 
   // Verify JWT
@@ -28,7 +28,7 @@ const findUserIdUsingAuthToken = async (authToken) => {
   try {
     decodedToken = jwt.verify(authToken, process.env.JWT_SECRET);
   } catch (error) {
-    throwError("Invalid or expired token.", 401);
+    throw new AppError("Invalid or expired token.", 401);
   }
 
   const userId = await findUserId(decodedToken);
@@ -44,7 +44,7 @@ async function findUserId(decodedToken) {
 
   const { rowCount } = await pool.query(query, values);
   if (rowCount < 1) {
-    throwError("User not found.", 404);
+    throw new AppError("User not found.", 404);
   }
 
   return userId;

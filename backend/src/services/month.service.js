@@ -1,4 +1,4 @@
-import { throwError } from "../utils/errorHandling.js";
+import { AppError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
 export const addMonthToDB = async (
@@ -30,30 +30,19 @@ export const addMonthToDB = async (
     const { rows } = await pool.query(query, values);
     return rows[0];
   } catch (error) {
-    // Handle unique violation
     if (error.code === "23505") {
-      throwError("Month already exists for this user.", 409);
+      throw new AppError("Month already exists", 409);
     }
-
-    // Unexpected DB error
-    console.error("Database error in addMonthToDB:", error);
-    throwError("Internal server error", 500);
+    throw error;
   }
 };
 
 export const getMonthsFromDB = async (userId) => {
-  if (!userId) throwError("No user ID given", 400);
-
   const query = `SELECT * FROM months WHERE user_id = $1`;
   const values = [userId];
 
-  try {
-    const { rows } = await pool.query(query, values);
-    return rows; // empty array if no months
-  } catch (error) {
-    console.error("Database error in getMonthsFromDB:", error);
-    throwError("Internal server error", 500);
-  }
+  const { rows } = await pool.query(query, values);
+  return rows; // empty array if no months
 };
 
 export async function editMonthInDB(
@@ -84,20 +73,14 @@ export async function editMonthInDB(
     userId,
   ];
 
-  try {
-    const { rows, rowCount } = await pool.query(query, values);
-    if (rowCount < 1) {
-      throwError("Month not found", 404);
-    }
-    return rows[0]; // updated month
-  } catch (error) {
-    console.error("Database error in editMonthInDB:", error);
-    throwError("Internal server error", 500);
+  const { rows, rowCount } = await pool.query(query, values);
+  if (rowCount < 1) {
+    throw new AppError("Month not found", 404);
   }
+  return rows[0]; // updated month
 }
 
 export async function deleteMonthFromDB(monthId, userId) {
-
   const query = `
     DELETE FROM months
     WHERE id = $1 AND user_id = $2
@@ -106,16 +89,11 @@ export async function deleteMonthFromDB(monthId, userId) {
 
   const values = [monthId, userId];
 
-  try {
-    const { rows, rowCount } = await pool.query(query, values);
+  const { rows, rowCount } = await pool.query(query, values);
 
-    if (rowCount < 1) {
-      throwError("Month not found", 404);
-    }
-
-    return rows[0];
-  } catch (error) {
-    console.error("Database error in deleteMonthFromDB:", error);
-    throwError("Internal server error", 500);
+  if (rowCount < 1) {
+    throw new AppError("Month not found", 404);
   }
+
+  return rows[0];
 }
