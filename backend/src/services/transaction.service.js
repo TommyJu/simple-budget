@@ -16,16 +16,29 @@ export async function addTransactionToDB(
   RETURNING *
     `;
   const values = [amount, category, description, monthId, userId];
-    const { rows } = await pool.query(query, values);
-    const addedTransaction = rows[0];
-    return addedTransaction;
+  const { rows } = await pool.query(query, values);
+  const addedTransaction = rows[0];
+  return addedTransaction;
 }
 
 export async function getTransactionsFromDB(
   userId,
   monthId,
   category = "all",
-) {}
+) {
+  const query = `
+    SELECT t.*
+    FROM transactions t
+    JOIN months m ON t.month_id = m.id
+    WHERE m.user_id = $1
+      AND m.id = $2
+      AND ($3 = 'all' OR t.category::text = $3)
+    ORDER BY t.created_at DESC;
+  `;
+  const values = [userId, monthId, category];
+  const { rows } = await pool.query(query, values);
+  return rows;
+}
 
 export async function editTransactionInDB(
   userId,

@@ -9,7 +9,6 @@ export const createTransactionSchema = z.object({
 
 export const getTransactionsSchema = z.object({
     monthId: z.coerce.bigint().min(1),
-    transactionId: z.coerce.bigint().min(1),
     category: z.enum(["needs", "wants", "savings", "all"]),
 });
 

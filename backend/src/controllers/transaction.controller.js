@@ -25,10 +25,23 @@ export async function createTransaction(req, res, next) {
 }
 
 // Gets all transactions for a monthly budget, filtered by category (optional)
-export async function getTransactions(req, res) {}
+export async function getTransactions(req, res, next) {
+  const userId = req.userId;
+  const data = req.validated;
+  try {
+    const transactions = await getTransactionsFromDB(
+      userId,
+      data.monthId,
+      data.category,
+    );
+    res.status(200).json(transactions);
+  } catch (error) {
+    next(error);
+  }
+}
 
 // Edits an existing transaction the belongs to the authenticated user
-export async function editTransaction(req, res) {}
+export async function editTransaction(req, res, next) {}
 
 // Deletes an existing transaction that belongs to the authenticated user
-export async function deleteTransaction(req, res) {}
+export async function deleteTransaction(req, res, next) {}
