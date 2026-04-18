@@ -41,7 +41,36 @@ export async function getTransactions(req, res, next) {
 }
 
 // Edits an existing transaction the belongs to the authenticated user
-export async function editTransaction(req, res, next) {}
+export async function editTransaction(req, res, next) {
+    const userId = req.userId;
+    const data = req.validated;
+    try {
+        const editedTransaction = await editTransactionInDB(
+            userId,
+            data.transactionId,
+            data.amount,
+            data.category,
+            data.description
+        )
+        res.status(200).json(editedTransaction);
+
+    } catch (error) {
+        next(error);
+    }
+}
 
 // Deletes an existing transaction that belongs to the authenticated user
-export async function deleteTransaction(req, res, next) {}
+export async function deleteTransaction(req, res, next) {
+    const userId = req.userId;
+    const data = req.validated;
+    try {
+        const deletedTransaction = await deleteTransactionFromDB(
+            userId,
+            data.transactionId,
+        )
+        res.status(200).json(deletedTransaction);
+
+    } catch (error) {
+        next(error);
+    }
+}

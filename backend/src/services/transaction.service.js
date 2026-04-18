@@ -46,6 +46,35 @@ export async function editTransactionInDB(
   amount,
   category,
   description,
-) {}
+) {
+  const query = `
+  UPDATE transactions t
+  SET
+    amount = $1,
+    category = $2,
+    description = $3
+  FROM months m
+  WHERE t.month_id = m.id
+    AND t.id = $4
+    AND m.user_id = $5
+  RETURNING t.*;
+`;
+  const values = [amount, category, description, transactionId, userId];
+  const { rows } = await pool.query(query, values);
+  return rows[0];
+}
 
-export async function deleteTransactionFromDB(userId, transactionId) {}
+export async function deleteTransactionFromDB(userId, transactionId) {
+  const query = `
+  DELETE FROM transactions t
+  USING months m
+  WHERE
+    t.month_id = m.id AND
+    m.user_id = $1 AND
+    t.id = $2
+  RETURNING t.*;
+  `;
+  const values = [userId, transactionId];
+  const { rows } = await pool.query(query, values);
+  return rows[0];
+}
