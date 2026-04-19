@@ -16,6 +16,9 @@ export async function addTransactionToDB(
     `;
   const values = [amount, category, description, monthId, userId];
   const { rows } = await pool.query(query, values);
+  if (rows.length === 0) {
+    throw new AppError("Failed to create transaction", 400);
+  }
   const addedTransaction = rows[0];
   return addedTransaction;
 }

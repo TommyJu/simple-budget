@@ -17,6 +17,9 @@ export async function addFixedExpenseToDB(
   const values = [userId, amount, category, description];
 
   const { rows } = await pool.query(query, values);
+  if (rows.length === 0) {
+    throw new AppError("Failed to create fixed expense", 400);
+  }
   return rows[0];
 }
 

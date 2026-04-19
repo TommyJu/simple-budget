@@ -51,6 +51,7 @@ CREATE TABLE transactions (
   amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0),
   category expense_category NOT NULL,
   description VARCHAR(255),
+  is_fixed_expense BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   month_id BIGINT REFERENCES months(id) ON DELETE CASCADE
 );
