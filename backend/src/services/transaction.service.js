@@ -1,4 +1,3 @@
-import { AppError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
 export async function addTransactionToDB(
@@ -21,11 +20,7 @@ export async function addTransactionToDB(
   return addedTransaction;
 }
 
-export async function getTransactionsFromDB(
-  userId,
-  monthId,
-  category = "all",
-) {
+export async function getTransactionsFromDB(userId, monthId, category = "all") {
   const query = `
     SELECT t.*
     FROM transactions t
@@ -61,6 +56,9 @@ export async function editTransactionInDB(
 `;
   const values = [amount, category, description, transactionId, userId];
   const { rows } = await pool.query(query, values);
+  if (rows.length === 0) {
+    throw new AppError("Transaction not found", 404);
+  }
   return rows[0];
 }
 
@@ -76,5 +74,8 @@ export async function deleteTransactionFromDB(userId, transactionId) {
   `;
   const values = [userId, transactionId];
   const { rows } = await pool.query(query, values);
+  if (rows.length === 0) {
+    throw new AppError("Transaction not found", 404);
+  }
   return rows[0];
 }

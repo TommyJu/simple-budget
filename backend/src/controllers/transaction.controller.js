@@ -1,4 +1,3 @@
-import { sendErrorResponse } from "../utils/errorHandling.js";
 import {
   addTransactionToDB,
   getTransactionsFromDB,
