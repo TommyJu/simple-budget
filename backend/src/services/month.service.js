@@ -1,5 +1,7 @@
 import { AppError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
+import { getFixedExpensesFromDB } from "./fixedExpense.service.js";
+import { addTransactionToDB } from "./transaction.service.js";
 
 export const addMonthToDB = async (
   year,
@@ -28,7 +30,11 @@ export const addMonthToDB = async (
 
   try {
     const { rows } = await pool.query(query, values);
-    return rows[0];
+    const createdMonth = rows[0];
+
+    await addFixedExpensesToMonth(userId, createdMonth.id);
+
+    return createdMonth;
   } catch (error) {
     if (error.code === "23505") {
       throw new AppError("Month already exists", 409);
@@ -96,4 +102,21 @@ export async function deleteMonthFromDB(monthId, userId) {
   }
 
   return rows[0];
+}
+
+// HELPER FUNCTIONS
+
+// Adds the fixed expenses associated with the user to the monthly budget as a transaction
+export async function addFixedExpensesToMonth(userId, monthId) {
+  const fixedExpenses = await getFixedExpensesFromDB(userId);
+  fixedExpenses.forEach(async (expense) => {
+    await addTransactionToDB(
+      userId,
+      monthId,
+      expense.amount,
+      expense.category,
+      expense.description,
+      true
+    );
+  });
 }

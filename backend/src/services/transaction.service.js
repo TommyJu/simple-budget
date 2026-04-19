@@ -6,15 +6,16 @@ export async function addTransactionToDB(
   amount,
   category,
   description,
+  isFixedExpense = false
 ) {
   const query = `
-        INSERT INTO transactions (amount, category, description, month_id)
-  SELECT $1, $2, $3, m.id
+        INSERT INTO transactions (amount, category, description, is_fixed_expense, month_id)
+  SELECT $1, $2, $3, $4, m.id
   FROM months m
-  WHERE m.id = $4 AND m.user_id = $5
+  WHERE m.id = $5 AND m.user_id = $6
   RETURNING *
     `;
-  const values = [amount, category, description, monthId, userId];
+  const values = [amount, category, description, isFixedExpense, monthId, userId];
   const { rows } = await pool.query(query, values);
   if (rows.length === 0) {
     throw new AppError("Failed to create transaction", 400);
