@@ -5,14 +5,13 @@ import { handleToastErrorMessage } from "@/lib/utils";
 
 const useMonthStore = create((set) => ({
   isMonthsLoading: false,
-  months: [],
+  monthOverviews: [],
 
-  getMonths: async () => {
+  getMonthOverviews: async () => {
     set({ isMonthsLoading: true });
     try {
-      const response = await monthService.getMonths();
-      mon
-      set({ months: response.data });
+      const response = await monthService.getMonthOverviews();
+      set({ monthOverviews: response.data });
     } catch (error) {
       handleToastErrorMessage(error, "Failed to load months");
     } finally {

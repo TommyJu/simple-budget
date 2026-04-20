@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 import { MIN_PASSWORD_LENGTH } from "@/../../shared/auth.constants";
-import { AxiosError } from "axios";
 
 export const handleToastErrorMessage = (error) => {
   const msg = error?.response?.data?.message || "Something went wrong";

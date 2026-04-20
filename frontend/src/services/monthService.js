@@ -4,8 +4,8 @@ const monthService = {
     createMonth() {
         return axiosInstance.post("/month/create-month", data);
     },
-    getMonths() {
-        return axiosInstance.get("/month/get-months");
+    getMonthOverviews() {
+        return axiosInstance.get("/month/get-month-overviews");
     },
 };
 

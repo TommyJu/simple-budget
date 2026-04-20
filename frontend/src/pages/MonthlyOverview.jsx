@@ -1,23 +1,22 @@
 import useAuthStore from "../store/auth/useAuthStore";
 import useMonthStore from "../store/month/useMonthStore";
+import MonthOverviewCard from "../components/cards/MonthOverviewCard";
 import { useEffect } from "react";
 
 const MonthlyOverview = () => {
   const { logout } = useAuthStore();
-  const { months, getMonths } = useMonthStore();
+  const { monthOverviews, getMonthOverviews } = useMonthStore();
 
   useEffect(() => {
-    getMonths();
+    getMonthOverviews();
   }, []);
 
   return (
     <div>
-      <p>MonthlyOverview page</p>
+      <p>Monthly Overview page</p>
       <button onClick={logout}>Logout</button>
-      {months.map(month => (
-        <p key={month.id} className="text-white">
-          {month.id}
-        </p>
+      {monthOverviews.map(monthOverview => (
+        <MonthOverviewCard monthOverview={monthOverview}/>
       ))}
     </div>
   );
