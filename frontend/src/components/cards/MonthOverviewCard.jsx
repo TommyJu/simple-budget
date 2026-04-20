@@ -16,7 +16,7 @@ const MonthOverviewCard = ({monthOverview}) => {
   });
 
   return (
-    <div className="border rounded-lg p-4 shadow-md bg-base-200 w-full max-w-md">
+    <div className="border rounded-lg p-4 shadow-md bg-base-200 w-full max-w-md hover:border-secondary transition duration-300">
       <h2 className="text-xl font-semibold mb-4">
         {monthName} {year}
       </h2>
