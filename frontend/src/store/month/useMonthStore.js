@@ -19,20 +19,22 @@ const useMonthStore = create((set) => ({
     }
   },
   createMonth: async (
-    date,
     income,
     needsPercentage,
     wantsPercentage,
     savingsPercentage,
+    year,
+    month
   ) => {
     set({ isMonthsLoading: true });
     try {
       const response = await monthService.createMonth(
-        date,
         income,
         needsPercentage,
         wantsPercentage,
         savingsPercentage,
+        year,
+        month,
       );
 
       const newMonth = response.data;

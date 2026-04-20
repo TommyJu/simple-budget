@@ -2,6 +2,7 @@ import useMonthStore from "../store/month/useMonthStore";
 import MonthOverviewCard from "../components/cards/MonthOverviewCard";
 import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
+import CreateMonthForm from "../components/forms/CreateMonthForm";
 
 const MonthlyOverview = () => {
   const { monthOverviews, getMonthOverviews } = useMonthStore();
@@ -25,7 +26,10 @@ const MonthlyOverview = () => {
             >
               + Create New Month
             </button>
-            <button className="btn btn-sm md:btn-md btn-secondary">
+            <button
+              className="btn btn-sm md:btn-md btn-secondary"
+              onClick={() => setActiveModal("fixedExpenses")}
+            >
               Manage Fixed Expenses
             </button>
           </div>
@@ -38,11 +42,14 @@ const MonthlyOverview = () => {
         ))}
       </div>
 
-      {/* Modal */}
+      {/* Modals */}
       {activeModal === "createMonth" && (
-        <ModalWrapper onClose={() => setActiveModal(null)}>
-          Hello
-          </ModalWrapper>
+        <ModalWrapper title={"Create Monthly Budget"} onClose={() => setActiveModal(null)}>
+          <CreateMonthForm onSubmit={() => {setActiveModal(null)}}/>
+        </ModalWrapper>
+      )}
+      {activeModal === "fixedExpenses" && (
+        <ModalWrapper onClose={() => setActiveModal(null)}>Bye</ModalWrapper>
       )}
     </div>
   );

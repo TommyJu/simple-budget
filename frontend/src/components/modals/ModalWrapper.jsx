@@ -1,13 +1,19 @@
-const ModalWrapper = ({ children, onClose }) => {
+const ModalWrapper = ({ children, onClose, title }) => {
   return (
     <dialog className="modal modal-open">
       <div className="modal-box">
-        <button
-          onClick={onClose}
-          className="btn btn-sm btn-circle absolute right-2 top-2"
-        >
-          X
-        </button>
+        <div className="flex justify-center">
+            <h3>
+                {title}
+            </h3>
+          <button
+            onClick={onClose}
+            className="btn btn-sm btn-circle absolute right-2 top-2"
+          >
+            X
+          </button>
+        </div>
+
         {children}
       </div>
       <form method="dialog" className="modal-backdrop">
