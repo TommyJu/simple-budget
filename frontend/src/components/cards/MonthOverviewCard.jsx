@@ -15,25 +15,19 @@ const MonthOverviewCard = ({monthOverview}) => {
     month: "long",
   });
 
-  const remaining = Number(income) - Number(total_spent);
-
   return (
     <div className="border rounded-lg p-4 shadow-md bg-base-200 w-full max-w-md">
-      <h2 className="text-xl font-semibold mb-2">
+      <h2 className="text-xl font-semibold mb-4">
         {monthName} {year}
       </h2>
 
       <div className="space-y-1 text-sm">
         <p>
-          <span className="font-medium">Income:</span> ${income}
+          <span className="font-medium">Estimated Income:</span> ${income}
         </p>
 
         <p>
           <span className="font-medium">Total Spent:</span> ${total_spent}
-        </p>
-
-        <p>
-          <span className="font-medium">Remaining:</span> ${remaining.toFixed(2)}
         </p>
 
         <hr className="my-2" />

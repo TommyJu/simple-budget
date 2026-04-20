@@ -13,11 +13,12 @@ const MonthlyOverview = () => {
 
   return (
     <div>
-      <p>Monthly Overview page</p>
-      <button onClick={logout}>Logout</button>
+      <h2>Monthly Budgets</h2>
       {monthOverviews.map(monthOverview => (
         <MonthOverviewCard monthOverview={monthOverview}/>
       ))}
+
+      <h2>Recurring Monthly Transactions</h2>
     </div>
   );
 };
