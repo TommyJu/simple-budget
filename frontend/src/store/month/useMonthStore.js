@@ -11,6 +11,7 @@ const useMonthStore = create((set) => ({
     set({ isMonthsLoading: true });
     try {
       const response = await monthService.getMonths();
+      mon
       set({ months: response.data });
     } catch (error) {
       handleToastErrorMessage(error, "Failed to load months");

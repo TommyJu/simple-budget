@@ -43,8 +43,26 @@ export const addMonthToDB = async (
   }
 };
 
-export const getMonthsFromDB = async (userId) => {
-  const query = `SELECT * FROM months WHERE user_id = $1`;
+export const getMonthOverviewsFromDB = async (userId) => {
+  const query = `
+  SELECT
+  m.id,
+  m.year,
+  m.month,
+  m.income,
+
+  COALESCE(SUM(t.amount), 0) AS total_spent,
+
+  COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'needs'), 0) AS needs_spent,
+  COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'wants'), 0) AS wants_spent,
+  COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'savings'), 0) AS savings_spent
+
+  FROM months m
+  LEFT JOIN transactions t ON t.month_id = m.id
+  WHERE m.user_id = $1
+  GROUP BY m.id
+  ORDER BY m.year DESC, m.month DESC;
+  `;
   const values = [userId];
 
   const { rows } = await pool.query(query, values);
@@ -104,10 +122,15 @@ export async function deleteMonthFromDB(monthId, userId) {
   return rows[0];
 }
 
-export async function getMonthlyBudgetDetailsFromDB(userId, monthId) {
+export async function getMonthDetailsFromDB(userId, monthId) {
   const query = `
     SELECT
+      m.id,
+      m.year,
+      m.month,
       m.income,
+
+
 
       -- Allocated budget per category
     ROUND(m.income * m.needs_percentage / 100, 2) AS needs_budget,
@@ -146,7 +169,7 @@ export async function getMonthlyBudgetDetailsFromDB(userId, monthId) {
     GROUP BY m.id;
   `;
   const values = [userId, monthId];
-  
+
   const { rows } = await pool.query(query, values);
   const budgetDetails = rows[0];
   return budgetDetails;

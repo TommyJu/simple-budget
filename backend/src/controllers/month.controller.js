@@ -1,9 +1,9 @@
 import {
   addMonthToDB,
-  getMonthsFromDB,
+  getMonthOverviewsFromDB,
   editMonthInDB,
   deleteMonthFromDB,
-  getMonthlyBudgetDetailsFromDB
+  getMonthDetailsFromDB
 } from "../services/month.service.js";
 
 // Creates a new monthly budget
@@ -27,11 +27,11 @@ export const createMonth = async (req, res, next) => {
 };
 
 // Gets all monthly budgets for the currently authenticated user
-export const getMonths = async (req, res, next) => {
+export const getMonthOverviews = async (req, res, next) => {
   const userId = req.userId;
   try {
-    const months = await getMonthsFromDB(userId);
-    res.status(200).json(months);
+    const monthOverviews = await getMonthOverviewsFromDB(userId);
+    res.status(200).json(monthOverviews);
   } catch (error) {
     next(error);
   }
@@ -68,12 +68,12 @@ export async function deleteMonth(req, res, next) {
   }
 }
 
-export async function getMonthlyBudgetDetails(req, res, next) {
+export async function getMonthDetails(req, res, next) {
   const userId = req.userId;
   const data = req.validated;
 
   try {
-    const budgetDetails = await getMonthlyBudgetDetailsFromDB(userId, data.monthId);
+    const budgetDetails = await getMonthDetailsFromDB(userId, data.monthId);
     res.status(200).json(budgetDetails);
   } catch (error) {
     next(error);

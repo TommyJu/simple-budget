@@ -39,6 +39,6 @@ export const deleteMonthSchema = z.object({
     monthId: z.coerce.bigint().min(1)
 });
 
-export const getBudgetDetailsSchema = z.object({
+export const getMonthDetailsSchema = z.object({
     monthId: z.coerce.bigint().min(1)
 });
