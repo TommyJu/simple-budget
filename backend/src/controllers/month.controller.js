@@ -3,6 +3,7 @@ import {
   getMonthsFromDB,
   editMonthInDB,
   deleteMonthFromDB,
+  getMonthlyBudgetDetailsFromDB
 } from "../services/month.service.js";
 
 // Creates a new monthly budget
@@ -62,6 +63,18 @@ export async function deleteMonth(req, res, next) {
   try {
     const deletedMonth = await deleteMonthFromDB(data.monthId, userId);
     res.status(200).json(deletedMonth);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getMonthlyBudgetDetails(req, res, next) {
+  const userId = req.userId;
+  const data = req.validated;
+
+  try {
+    const budgetDetails = await getMonthlyBudgetDetailsFromDB(userId, data.monthId);
+    res.status(200).json(budgetDetails);
   } catch (error) {
     next(error);
   }

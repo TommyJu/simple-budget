@@ -104,6 +104,54 @@ export async function deleteMonthFromDB(monthId, userId) {
   return rows[0];
 }
 
+export async function getMonthlyBudgetDetailsFromDB(userId, monthId) {
+  const query = `
+    SELECT
+      m.income,
+
+      -- Allocated budget per category
+    ROUND(m.income * m.needs_percentage / 100, 2) AS needs_budget,
+    ROUND(m.income * m.wants_percentage / 100, 2) AS wants_budget,
+    ROUND(m.income * m.savings_percentage / 100, 2) AS savings_budget,
+
+    -- Actual spending per category
+    ROUND(COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'needs'), 0), 2) AS needs_spent,
+    ROUND(COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'wants'), 0), 2) AS wants_spent,
+    ROUND(COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'savings'), 0), 2) AS savings_spent,
+
+    -- Remaining per category
+    ROUND(
+      (m.income * m.needs_percentage / 100)
+      - COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'needs'), 0),
+      2
+    ) AS needs_remaining,
+
+    ROUND(
+      (m.income * m.wants_percentage / 100)
+      - COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'wants'), 0),
+      2
+    ) AS wants_remaining,
+
+    ROUND(
+      (m.income * m.savings_percentage / 100)
+      - COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'savings'), 0),
+      2
+    ) AS savings_remaining
+
+    FROM months m
+    LEFT JOIN transactions t ON t.month_id = m.id
+
+    WHERE m.user_id = $1 AND m.id = $2
+
+    GROUP BY m.id;
+  `;
+  const values = [userId, monthId];
+  
+  const { rows } = await pool.query(query, values);
+  const budgetDetails = rows[0];
+  return budgetDetails;
+}
+
 // HELPER FUNCTIONS
 
 // Adds the fixed expenses associated with the user to the monthly budget as a transaction
@@ -116,7 +164,7 @@ export async function addFixedExpensesToMonth(userId, monthId) {
       expense.amount,
       expense.category,
       expense.description,
-      true
+      true,
     );
   });
 }
