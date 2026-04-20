@@ -13,10 +13,27 @@ export const addMonthToDB = async (
   userId,
 ) => {
   const query = `
-    INSERT INTO months 
-      (year, month, income, needs_percentage, wants_percentage, savings_percentage, user_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING *
+    WITH new_month AS (
+      INSERT INTO months 
+        (year, month, income, needs_percentage, wants_percentage, savings_percentage, user_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *
+    )
+    SELECT
+      nm.id,
+      nm.year,
+      nm.month,
+      nm.income,
+
+      COALESCE(SUM(t.amount), 0) AS total_spent,
+
+      COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'needs'), 0) AS needs_spent,
+      COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'wants'), 0) AS wants_spent,
+      COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'savings'), 0) AS savings_spent
+
+    FROM new_month nm
+    LEFT JOIN transactions t ON t.month_id = nm.id
+    GROUP BY nm.id, nm.year, nm.month, nm.income;
   `;
   const values = [
     year,

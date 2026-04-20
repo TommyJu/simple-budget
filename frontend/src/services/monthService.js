@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/lib/axios";
 
 const monthService = {
-    createMonth() {
+    createMonth(data) {
         return axiosInstance.post("/month/create-month", data);
     },
     getMonthOverviews() {

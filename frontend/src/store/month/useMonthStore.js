@@ -18,29 +18,17 @@ const useMonthStore = create((set) => ({
       set({ isMonthsLoading: false });
     }
   },
-  createMonth: async (
-    income,
-    needsPercentage,
-    wantsPercentage,
-    savingsPercentage,
-    year,
-    month
-  ) => {
+  createMonth: async (payloadData) => {
     set({ isMonthsLoading: true });
     try {
       const response = await monthService.createMonth(
-        income,
-        needsPercentage,
-        wantsPercentage,
-        savingsPercentage,
-        year,
-        month,
+        payloadData
       );
 
       const newMonth = response.data;
 
       set((state) => ({
-        months: [...state.months, newMonth],
+        monthOverviews: [...state.monthOverviews, newMonth],
       }));
 
       toast.success("Monthly budget created successfully");

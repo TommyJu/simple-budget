@@ -5,12 +5,12 @@ import ModalWrapper from "../components/modals/ModalWrapper";
 import CreateMonthForm from "../components/forms/CreateMonthForm";
 
 const MonthlyOverview = () => {
-  const { monthOverviews, getMonthOverviews } = useMonthStore();
+  const { monthOverviews, getMonthOverviews, createMonth } = useMonthStore();
   const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
     getMonthOverviews();
-  }, []);
+  }, [monthOverviews]);
 
   return (
     <div className="flex flex-col h-dvh">
@@ -45,7 +45,10 @@ const MonthlyOverview = () => {
       {/* Modals */}
       {activeModal === "createMonth" && (
         <ModalWrapper title={"Create Monthly Budget"} onClose={() => setActiveModal(null)}>
-          <CreateMonthForm onSubmit={() => {setActiveModal(null)}}/>
+          <CreateMonthForm onSubmit={(payload) => {
+            setActiveModal(null);
+            createMonth(payload);
+            }}/>
         </ModalWrapper>
       )}
       {activeModal === "fixedExpenses" && (

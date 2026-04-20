@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import { MIN_PASSWORD_LENGTH } from "@/../../shared/auth.constants";
 
 export const handleToastErrorMessage = (error) => {
+  console.error(error);
   const msg = error?.response?.data?.message || "Something went wrong";
   toast(msg, {
     icon: "⚠️",
