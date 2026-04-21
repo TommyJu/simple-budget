@@ -26,12 +26,12 @@ const MonthlyOverview = () => {
             >
               + Create New Month
             </button>
-            <button
+            <a
               className="btn btn-sm md:btn-md btn-secondary"
-              onClick={() => setActiveModal("fixedExpenses")}
+              href="/fixed-expenses"
             >
               Manage Fixed Expenses
-            </button>
+            </a>
           </div>
         </div>
         {monthOverviews && (monthOverviews.map((monthOverview) => (
@@ -53,9 +53,6 @@ const MonthlyOverview = () => {
             createMonth(payload);
             }}/>
         </ModalWrapper>
-      )}
-      {activeModal === "fixedExpenses" && (
-        <ModalWrapper onClose={() => setActiveModal(null)}>Bye</ModalWrapper>
       )}
     </div>
   );

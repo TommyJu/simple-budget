@@ -10,6 +10,7 @@ import Login from "@/pages/Login";
 import SignUp from "@/pages/SignUp";
 import MonthlyOverview from "@/pages/MonthlyOverview";
 import MonthlyDetails from "@/pages/MonthlyDetails";
+import FixedExpenses from "./pages/FixedExpenses";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -52,6 +53,10 @@ function App() {
         <Route
           path="/monthly-details"
           element={authUser ? <MonthlyDetails /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/fixed-expenses"
+          element={authUser ? <FixedExpenses /> : <Navigate to="/" />}
         />
       </Routes>
 
