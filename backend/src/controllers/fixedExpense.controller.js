@@ -24,7 +24,7 @@ export async function createFixedExpense(req, res, next) {
 
 export async function getFixedExpenses(req, res, next) {
   const userId = req.userId;
-  const data = req.validated;
+  const data = req.query;;
 
   try {
     const fixedExpenses = await getFixedExpensesFromDB(userId, data.category);

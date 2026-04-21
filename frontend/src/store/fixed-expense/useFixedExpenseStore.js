@@ -8,6 +8,8 @@ const useFixedExpenseStore = create((set, get) => ({
   currentFilter: "all",
   isLoadingFixedExpenses: false,
 
+  setFilter: (filter) => set({ currentFilter: filter }),
+
   createFixedExpense: async function (data) {
     set({ isLoadingFixedExpenses: true });
     try {
@@ -34,7 +36,7 @@ const useFixedExpenseStore = create((set, get) => ({
     try {
       const { currentFilter } = get();
       const response =
-        await fixedExpenseService.getFixedExpenses(currentFilter);
+        await fixedExpenseService.getFixedExpenses({category: currentFilter});
       const fixedExpenses = response.data;
       set({ fixedExpenses: fixedExpenses });
     } catch (error) {

@@ -6,10 +6,6 @@ export const createFixedExpenseSchema = z.object({
     description: z.string().min(1, "Description cannot be empty"),
 });
 
-export const getFixedExpensesSchema = z.object({
-    category: z.enum(["needs", "wants", "savings", "all"]),
-});
-
 export const editFixedExpenseSchema = z.object({
     fixedExpenseId: z.coerce.bigint().min(1),
     amount: z.coerce.number().min(0),
