@@ -57,11 +57,7 @@ function App() {
 
       <Toaster
         toastOptions={{
-          className: "rounded-lg border border-base-content p-4 shadow-lg",
-          style: {
-            background: "var(--bs-base-300)",
-            color: "var(--bs-base-content)",
-          },
+          className:  "rounded-lg border border-base-content !bg-base-300 !text-base-content p-4 shadow-lg"
         }}
       />
     </div>

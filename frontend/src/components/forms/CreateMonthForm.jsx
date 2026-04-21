@@ -4,9 +4,9 @@ import useMonthStore from "../../store/month/useMonthStore";
 const CreateMonthForm = ({ onSubmit }) => {
   const [form, setForm] = useState({
     income: "",
-    needs: "",
-    wants: "",
-    savings: "",
+    needs: "50",
+    wants: "30",
+    savings: "20",
     year: "",
     month: "",
   });
@@ -30,10 +30,11 @@ const CreateMonthForm = ({ onSubmit }) => {
   const allAllocationsFilled =
     form.needs !== "" && form.wants !== "" && form.savings !== "";
 
-  const isNonNegative = needs >= 0 && wants >= 0 && savings >= 0;
+  const isNonNegative =
+    needs >= 0 && wants >= 0 && savings >= 0 && incomeNum >= 0;
 
   const isValidAllocation =
-    total === 100 && allAllocationsFilled && isNonNegative;
+    total === 100 && allAllocationsFilled;
 
   const isFormComplete =
     form.income !== "" && form.year !== "" && form.month !== "";
@@ -56,15 +57,24 @@ const CreateMonthForm = ({ onSubmit }) => {
     onSubmit?.(payload);
   };
 
-  const isOver = total > 100;
-
   const { monthOverviews } = useMonthStore();
   const monthExists = monthOverviews.some(
-  (m) => m.year === Number(form.year) && m.month === Number(form.month)
-);
+    (m) => m.year === Number(form.year) && m.month === Number(form.month),
+  );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+      <p className="text-sm">
+        Create a budget by splitting your estimated monthly income into three
+        spending categories.{" "}
+        <a
+          className="underline text-secondary"
+          href="https://www.wealthsimple.com/en-ca/learn/50-30-20-rule"
+          target="_blank"
+        >
+          Learn more.
+        </a>
+      </p>
       {/* Income */}
       <div>
         <label className="label">
@@ -85,10 +95,8 @@ const CreateMonthForm = ({ onSubmit }) => {
       {/* Needs */}
       <div>
         <label className="label w-full">
-            <span className="label-text">Needs (%)</span>
-            <span className="label-text ml-auto">
-              ${needsAmount}
-            </span>
+          <span className="label-text">Needs (%)</span>
+          <span className="label-text ml-auto">${needsAmount}</span>
         </label>
         <input
           name="needs"
@@ -106,10 +114,8 @@ const CreateMonthForm = ({ onSubmit }) => {
       {/* Wants */}
       <div>
         <label className="label w-full">
-            <span className="label-text">Wants (%)</span>
-            <span className="label-text ml-auto">
-              ${wantsAmount}
-            </span>
+          <span className="label-text">Wants (%)</span>
+          <span className="label-text ml-auto">${wantsAmount}</span>
         </label>
         <input
           name="wants"
@@ -127,10 +133,8 @@ const CreateMonthForm = ({ onSubmit }) => {
       {/* Savings */}
       <div>
         <label className="label w-full">
-            <span className="label-text">Savings (%)</span>
-            <span className="label-text ml-auto">
-              ${savingsAmount}
-            </span>
+          <span className="label-text">Savings (%)</span>
+          <span className="label-text ml-auto">${savingsAmount}</span>
         </label>
         <input
           name="savings"
@@ -148,11 +152,7 @@ const CreateMonthForm = ({ onSubmit }) => {
       {/* Allocation feedback */}
       <p
         className={`text-sm ${
-          isValidAllocation
-            ? "text-success"
-            : isOver
-              ? "text-error"
-              : "text-warning"
+          isValidAllocation ? "text-success" : "text-error"
         }`}
       >
         Total Allocation: {total}% (must equal 100%)
@@ -201,14 +201,16 @@ const CreateMonthForm = ({ onSubmit }) => {
         </div>
       </div>
 
-        {monthExists && (
-            <p className="text-error text-sm">A monthly budget for this date already exists.</p>
-        )}
+      {monthExists && (
+        <p className="text-error text-sm">
+          A monthly budget for this date already exists.
+        </p>
+      )}
       {/* Submit */}
       <button
         type="submit"
         className="btn btn-primary w-full"
-        disabled={!isFormValid || monthExists}
+        disabled={!isFormValid || monthExists || !isNonNegative}
       >
         Create Month
       </button>

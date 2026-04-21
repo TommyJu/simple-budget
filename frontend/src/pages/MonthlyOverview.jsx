@@ -34,12 +34,15 @@ const MonthlyOverview = () => {
             </button>
           </div>
         </div>
-        {monthOverviews.map((monthOverview) => (
+        {monthOverviews && (monthOverviews.map((monthOverview) => (
           <MonthOverviewCard
             key={monthOverview.id}
             monthOverview={monthOverview}
           />
-        ))}
+        )))}
+        {!monthOverviews && (
+          <p className="text-lg font-bold">Looks like there are no budgets yet. <br/> Use the "+ Create New Month" button to get started! 💸</p>
+        )}
       </div>
 
       {/* Modals */}
