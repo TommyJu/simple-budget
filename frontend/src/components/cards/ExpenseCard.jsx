@@ -10,32 +10,32 @@ const ExpenseCard = ({amount, description, createdAt, category}) => {
   str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
 
   return (
-    <div className="flex flex-wrap gap-2 p-4 border rounded-lg justify-evenly">
-      <div>
+    <button className="hover:border-secondary flex flex-wrap gap-4 p-4 border rounded-lg justify-evenly w-full md:w-[80%]">
+      <div className="flex flex-col items-start">
         <label className="label">
           <span className="label-text">AMOUNT</span>
         </label>
-        <p>${amount}</p>
+        <p className="text-sm">${amount}</p>
       </div>
-      <div>
+      <div className="flex flex-col items-start">
         <label className="label">
           <span className="label-text">DESCRIPTION</span>
         </label>
-        <p>{capitalize(description)}</p>
+        <p className="text-sm">{capitalize(description)}</p>
       </div>
-      <div>
+      <div className="flex flex-col items-start">
         <label className="label">
           <span className="label-text">CATEGORY</span>
         </label>
-        <p>{capitalize(category)}</p>
+        <p className="text-sm">{capitalize(category)}</p>
       </div>
-      <div>
+      <div className="flex flex-col items-start">
         <label className="label">
           <span className="label-text">DATE</span>
         </label>
-        <p>{formattedDate}</p>
+        <p className="text-sm">{formattedDate}</p>
       </div>
-    </div>
+    </button>
   );
 };
 

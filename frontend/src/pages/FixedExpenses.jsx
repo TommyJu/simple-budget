@@ -19,48 +19,41 @@ const FixedExpenses = () => {
         + Create New Fixed Expense
       </button>
       {/* Category Filter */}
-      <div className="flex flex-wrap items-center">
-        <p>Filter by Category:</p>
-        <form className="filter" onReset={() => setFilter("all")}>
-          {/* Reset → All */}
-          <input
-            className="btn btn-square"
-            type="reset"
-            value="×"
-            title="All"
-          />
 
-          <input
-            className="btn"
-            type="radio"
-            name="expense-filter"
-            aria-label="Needs"
-            checked={currentFilter === "needs"}
-            onChange={() => setFilter("needs")}
-          />
+      <form className="filter" onReset={() => setFilter("all")}>
+        {/* Reset → All */}
+        <input className="btn btn-square" type="reset" value="×" title="All" />
 
-          <input
-            className="btn"
-            type="radio"
-            name="expense-filter"
-            aria-label="Wants"
-            checked={currentFilter === "wants"}
-            onChange={() => setFilter("wants")}
-          />
+        <input
+          className="btn"
+          type="radio"
+          name="expense-filter"
+          aria-label="Needs"
+          checked={currentFilter === "needs"}
+          onChange={() => setFilter("needs")}
+        />
 
-          <input
-            className="btn"
-            type="radio"
-            name="expense-filter"
-            aria-label="Savings"
-            checked={currentFilter === "savings"}
-            onChange={() => setFilter("savings")}
-          />
-        </form>
-      </div>
+        <input
+          className="btn"
+          type="radio"
+          name="expense-filter"
+          aria-label="Wants"
+          checked={currentFilter === "wants"}
+          onChange={() => setFilter("wants")}
+        />
+
+        <input
+          className="btn"
+          type="radio"
+          name="expense-filter"
+          aria-label="Savings"
+          checked={currentFilter === "savings"}
+          onChange={() => setFilter("savings")}
+        />
+      </form>
 
       {/* Fixed Expenses */}
-      <div className="w-full">
+      <div className="w-full flex flex-col items-center gap-2">
         {fixedExpenses.map((expense) => (
           <ExpenseCard
             key={expense.id} // or _id depending on your DB
