@@ -1,10 +1,19 @@
 import ExpenseCard from "../components/cards/ExpenseCard";
 import useFixedExpenseStore from "../store/fixed-expense/useFixedExpenseStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ModalWrapper from "../components/modals/ModalWrapper";
+import CreateExpenseForm from "../components/forms/CreateExpenseForm";
 
 const FixedExpenses = () => {
-  const { fixedExpenses, setFilter, currentFilter, getFixedExpenses } =
-    useFixedExpenseStore();
+  const {
+    fixedExpenses,
+    setFilter,
+    currentFilter,
+    getFixedExpenses,
+    createFixedExpense,
+  } = useFixedExpenseStore();
+
+  const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
     getFixedExpenses();
@@ -15,7 +24,10 @@ const FixedExpenses = () => {
       <h2 className="text-4xl md:text-5xl px-4 text-primary indie-flower-regular">
         Fixed Expenses
       </h2>
-      <button className="btn btn-primary btn-sm md:btn-md">
+      <button
+        onClick={() => setActiveModal("createFixedExpense")}
+        className="btn btn-primary btn-sm md:btn-md"
+      >
         + Create New Fixed Expense
       </button>
       {/* Category Filter */}
@@ -53,7 +65,7 @@ const FixedExpenses = () => {
       </form>
 
       {/* Fixed Expenses */}
-      <div className="w-full flex flex-col items-center gap-2">
+      <div className="w-full flex flex-col items-center gap-4">
         {fixedExpenses.map((expense) => (
           <ExpenseCard
             key={expense.id} // or _id depending on your DB
@@ -64,6 +76,20 @@ const FixedExpenses = () => {
           />
         ))}
       </div>
+      {/* Modals */}
+      {activeModal === "createFixedExpense" && (
+        <ModalWrapper
+          title={"Create Fixed Expense"}
+          onClose={() => setActiveModal(null)}
+        >
+          <CreateExpenseForm
+            onSubmit={(payload) => {
+              setActiveModal(null);
+              createFixedExpense(payload);
+            }}
+          />
+        </ModalWrapper>
+      )}
     </div>
   );
 };

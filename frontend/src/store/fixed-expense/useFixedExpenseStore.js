@@ -21,7 +21,7 @@ const useFixedExpenseStore = create((set, get) => ({
         currentFilter === newFixedExpense.category
       ) {
         set((state) => ({
-          fixedExpenses: [...state.fixedExpenses, newFixedExpense],
+          fixedExpenses: [newFixedExpense, ...state.fixedExpenses],
         }));
       }
       toast.success("Fixed expense created successfully");
