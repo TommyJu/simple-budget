@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useMonthStore from "../../store/month/useMonthStore";
 
 const CreateMonthForm = ({ onSubmit }) => {
   const [form, setForm] = useState({
@@ -57,12 +58,17 @@ const CreateMonthForm = ({ onSubmit }) => {
 
   const isOver = total > 100;
 
+  const { monthOverviews } = useMonthStore();
+  const monthExists = monthOverviews.some(
+  (m) => m.year === Number(form.year) && m.month === Number(form.month)
+);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
       {/* Income */}
       <div>
         <label className="label">
-          <span className="label-text">Estimated Monthly Income</span>
+          <span className="label-text">Estimated Monthly Income ($)</span>
         </label>
         <input
           name="income"
@@ -72,6 +78,7 @@ const CreateMonthForm = ({ onSubmit }) => {
           required
           value={form.income}
           onChange={handleChange}
+          title={"Please enter a positive number"}
         />
       </div>
 
@@ -92,6 +99,7 @@ const CreateMonthForm = ({ onSubmit }) => {
           required
           value={form.needs}
           onChange={handleChange}
+          title={"Please enter a number between 0 and 100"}
         />
       </div>
 
@@ -112,6 +120,7 @@ const CreateMonthForm = ({ onSubmit }) => {
           required
           value={form.wants}
           onChange={handleChange}
+          title={"Please enter a number between 0 and 100"}
         />
       </div>
 
@@ -132,6 +141,7 @@ const CreateMonthForm = ({ onSubmit }) => {
           required
           value={form.savings}
           onChange={handleChange}
+          title={"Please enter a number between 0 and 100"}
         />
       </div>
 
@@ -191,11 +201,14 @@ const CreateMonthForm = ({ onSubmit }) => {
         </div>
       </div>
 
+        {monthExists && (
+            <p className="text-error text-sm">A monthly budget for this date already exists.</p>
+        )}
       {/* Submit */}
       <button
         type="submit"
         className="btn btn-primary w-full"
-        disabled={!isFormValid}
+        disabled={!isFormValid || monthExists}
       >
         Create Month
       </button>
