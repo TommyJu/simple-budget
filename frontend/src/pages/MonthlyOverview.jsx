@@ -3,14 +3,16 @@ import MonthOverviewCard from "../components/cards/MonthOverviewCard";
 import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
 import CreateMonthForm from "../components/forms/CreateMonthForm";
+import { Loader } from "lucide-react";
 
 const MonthlyOverview = () => {
-  const { monthOverviews, getMonthOverviews, createMonth } = useMonthStore();
+  const { monthOverviews, getMonthOverviews, createMonth, isMonthsLoading } =
+    useMonthStore();
   const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
     getMonthOverviews();
-  }, [monthOverviews]);
+  }, []);
 
   return (
     <div className="flex flex-col h-dvh">
@@ -34,24 +36,33 @@ const MonthlyOverview = () => {
             </a>
           </div>
         </div>
-        {monthOverviews && (monthOverviews.map((monthOverview) => (
-          <MonthOverviewCard
-            key={monthOverview.id}
-            monthOverview={monthOverview}
-          />
-        )))}
-        {!monthOverviews && (
-          <p className="text-lg font-bold">Looks like there are no budgets yet. <br/> Use the "+ Create New Month" button to get started! 💸</p>
+        {!monthOverviews && !isMonthsLoading ? (
+          <p className="text-lg font-bold">
+            Looks like there are no budgets yet. <br />
+            Use the "+ Create New Month" button to get started! 💸
+          </p>
+        ) : (
+          monthOverviews.map((monthOverview) => (
+            <MonthOverviewCard
+              key={monthOverview.id}
+              monthOverview={monthOverview}
+            />
+          ))
         )}
       </div>
 
       {/* Modals */}
       {activeModal === "createMonth" && (
-        <ModalWrapper title={"Create Monthly Budget"} onClose={() => setActiveModal(null)}>
-          <CreateMonthForm onSubmit={(payload) => {
-            setActiveModal(null);
-            createMonth(payload);
-            }}/>
+        <ModalWrapper
+          title={"Create Monthly Budget"}
+          onClose={() => setActiveModal(null)}
+        >
+          <CreateMonthForm
+            onSubmit={(payload) => {
+              setActiveModal(null);
+              createMonth(payload);
+            }}
+          />
         </ModalWrapper>
       )}
     </div>

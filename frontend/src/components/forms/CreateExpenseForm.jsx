@@ -31,7 +31,7 @@ const CreateExpenseForm = ({ onSubmit, existingExpense }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-        <p className="text-sm">Fixed expenses are payments </p>
+        <p className="text-sm">Fixed expenses are recurring monthly payments that are automatically applied to each new budget.</p>
       {/* Amount */}
       <div>
         <label className="label">
@@ -66,10 +66,6 @@ const CreateExpenseForm = ({ onSubmit, existingExpense }) => {
         />
       </div>
       {/* Category */}
-      <div>
-        <label className="label">
-          <span className="label-text">Category</span>
-        </label>
         <select
           name="category"
           className="select select-bordered w-1/2 validator"
@@ -82,7 +78,6 @@ const CreateExpenseForm = ({ onSubmit, existingExpense }) => {
           <option value="wants">Wants</option>
           <option value="savings">Savings</option>
         </select>
-      </div>
 
       {/* Submit */}
       <button

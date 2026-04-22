@@ -3,6 +3,7 @@ import useFixedExpenseStore from "../store/fixed-expense/useFixedExpenseStore";
 import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
 import CreateExpenseForm from "../components/forms/CreateExpenseForm";
+import { Loader } from "lucide-react";
 
 const FixedExpenses = () => {
   const {
@@ -11,6 +12,7 @@ const FixedExpenses = () => {
     currentFilter,
     getFixedExpenses,
     createFixedExpense,
+    isLoadingFixedExpenses,
   } = useFixedExpenseStore();
 
   const [activeModal, setActiveModal] = useState(null);
@@ -24,57 +26,71 @@ const FixedExpenses = () => {
       <h2 className="text-4xl md:text-5xl px-4 text-primary indie-flower-regular">
         Fixed Expenses
       </h2>
-      <button
-        onClick={() => setActiveModal("createFixedExpense")}
-        className="btn btn-primary btn-sm md:btn-md"
-      >
-        + Create New Fixed Expense
-      </button>
-      {/* Category Filter */}
+      <div className="w-full flex flex-wrap-reverse gap-8 justify-center">
+        {/* Category Filter */}
 
-      <form className="filter" onReset={() => setFilter("all")}>
-        {/* Reset → All */}
-        <input className="btn btn-square" type="reset" value="×" title="All" />
+        <form className="filter" onReset={() => setFilter("all")}>
+          {/* Reset → All */}
+          <input
+            className="btn btn-square"
+            type="reset"
+            value="×"
+            title="All"
+          />
 
-        <input
-          className="btn"
-          type="radio"
-          name="expense-filter"
-          aria-label="Needs"
-          checked={currentFilter === "needs"}
-          onChange={() => setFilter("needs")}
-        />
+          <input
+            className="btn"
+            type="radio"
+            name="expense-filter"
+            aria-label="Needs"
+            checked={currentFilter === "needs"}
+            onChange={() => setFilter("needs")}
+          />
 
-        <input
-          className="btn"
-          type="radio"
-          name="expense-filter"
-          aria-label="Wants"
-          checked={currentFilter === "wants"}
-          onChange={() => setFilter("wants")}
-        />
+          <input
+            className="btn"
+            type="radio"
+            name="expense-filter"
+            aria-label="Wants"
+            checked={currentFilter === "wants"}
+            onChange={() => setFilter("wants")}
+          />
 
-        <input
-          className="btn"
-          type="radio"
-          name="expense-filter"
-          aria-label="Savings"
-          checked={currentFilter === "savings"}
-          onChange={() => setFilter("savings")}
-        />
-      </form>
+          <input
+            className="btn"
+            type="radio"
+            name="expense-filter"
+            aria-label="Savings"
+            checked={currentFilter === "savings"}
+            onChange={() => setFilter("savings")}
+          />
+        </form>
+        <button
+          onClick={() => setActiveModal("createFixedExpense")}
+          className="btn btn-primary btn-md"
+        >
+          + Create New Fixed Expense
+        </button>
+      </div>
 
       {/* Fixed Expenses */}
       <div className="w-full flex flex-col items-center gap-4">
-        {fixedExpenses.map((expense) => (
-          <ExpenseCard
-            key={expense.id} // or _id depending on your DB
-            amount={expense.amount}
-            description={expense.description}
-            createdAt={expense.created_at}
-            category={expense.category}
-          />
-        ))}
+        {!fixedExpenses && !isLoadingFixedExpenses ? (
+          <p className="text-lg font-bold text-center">
+            No fixed expenses found. <br />
+            Click “Create New Fixed Expense” to add one 💸
+          </p>
+        ) : (
+          fixedExpenses.map((expense) => (
+            <ExpenseCard
+              key={expense.id}
+              amount={expense.amount}
+              description={expense.description}
+              createdAt={expense.created_at}
+              category={expense.category}
+            />
+          ))
+        )}
       </div>
       {/* Modals */}
       {activeModal === "createFixedExpense" && (
