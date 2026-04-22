@@ -7,6 +7,15 @@ const monthService = {
     getMonthOverviews() {
         return axiosInstance.get("/month/get-month-overviews");
     },
+    getMonthDetails(monthId) {
+        return axiosInstance.get("/month/get-month-details", {params: monthId});
+    },
+    deleteMonth(monthId) {
+        return axiosInstance.delete("/month/delete-month", {params: monthId});
+    },
+    editMonth(data) {
+        return axiosInstance.put("/month/edit-month", data);
+    }
 };
 
 export default monthService;

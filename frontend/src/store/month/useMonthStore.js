@@ -7,6 +7,7 @@ const useMonthStore = create((set) => ({
   isMonthsLoading: false,
   monthOverviews: [],
   selectedMonthId: null,
+  selectedMonthDetails: null,
 
   setSelectedMonthId: (monthId) => {
     set({
@@ -35,10 +36,53 @@ const useMonthStore = create((set) => ({
       set((state) => ({
         monthOverviews: [...state.monthOverviews, newMonth],
       }));
-
       toast.success("Monthly budget created successfully");
     } catch (error) {
       handleToastErrorMessage(error, "Failed to create monthly budget");
+    } finally {
+      set({ isMonthsLoading: false });
+    }
+  },
+
+  getMonthDetails: async (monthId) => {
+    set({ isMonthsLoading: true });
+    try {
+      const response = await monthService.getMonthDetails(monthId);
+      set({
+        selectedMonthDetails: response.data,
+      });
+    } catch (error) {
+      handleToastErrorMessage(error, "Failed to load months details");
+    } finally {
+      set({ isMonthsLoading: false });
+    }
+  },
+
+  editMonth: async (data) => {
+    set({ isMonthsLoading: true });
+    try {
+      const response = await monthService.editMonth(data);
+      const updatedMonthDetails = response.data;
+      set({
+        selectedMonthDetails: updatedMonthDetails,
+      });
+    } catch (error) {
+      handleToastErrorMessage(error, "Failed to edit month");
+    } finally {
+      set({ isMonthsLoading: false });
+    }
+  },
+
+  deleteMonth: async (monthId) => {
+    set({ isMonthsLoading: true });
+    try {
+      const response = await monthService.deleteMonth(monthId);
+  
+      set({selectedMonthDetails: null});
+      set({selectedMonthId: null});
+
+    } catch (error) {
+      handleToastErrorMessage(error, "Failed to delete month");
     } finally {
       set({ isMonthsLoading: false });
     }

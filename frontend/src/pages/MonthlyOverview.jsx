@@ -12,6 +12,8 @@ const MonthlyOverview = () => {
     createMonth,
     isMonthsLoading,
     setSelectedMonthId,
+    getMonthDetails,
+    deleteMonth,
   } = useMonthStore();
   const [activeModal, setActiveModal] = useState(null);
 

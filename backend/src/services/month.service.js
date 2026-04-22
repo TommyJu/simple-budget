@@ -114,11 +114,11 @@ export async function editMonthInDB(
     userId,
   ];
 
-  const { rows, rowCount } = await pool.query(query, values);
+  const { rowCount } = await pool.query(query, values);
   if (rowCount < 1) {
     throw new AppError("Month not found", 404);
   }
-  return rows[0]; // updated month
+  return getMonthDetailsFromDB(userId, monthId); // updated month
 }
 
 export async function deleteMonthFromDB(monthId, userId) {

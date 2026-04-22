@@ -4,6 +4,7 @@ import useThemeStore from "@/store/theme/useThemeStore";
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import useAuthStore from "@/store/auth/useAuthStore";
+import useMonthStore from "./store/month/useMonthStore";
 
 import Landing from "@/pages/Landing";
 import Login from "@/pages/Login";
@@ -26,6 +27,8 @@ function App() {
   useEffect(() => {
     checkAuth();
   }, []);
+
+  const { selectedMonthId } = useMonthStore();
 
   if (isCheckingAuth && !authUser) {
     return (
@@ -52,7 +55,7 @@ function App() {
         />
         <Route
           path="/monthly-details"
-          element={authUser ? <MonthlyDetails /> : <Navigate to="/" />}
+          element={authUser && selectedMonthId ? <MonthlyDetails /> : <Navigate to="/" />}
         />
         <Route
           path="/fixed-expenses"

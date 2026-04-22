@@ -34,11 +34,3 @@ export const editMonthSchema = z
       message: "Percentages must total 100",
     },
   );
-
-export const deleteMonthSchema = z.object({
-    monthId: z.coerce.bigint().min(1)
-});
-
-export const getMonthDetailsSchema = z.object({
-    monthId: z.coerce.bigint().min(1)
-});

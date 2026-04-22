@@ -58,7 +58,7 @@ export async function editMonth(req, res, next) {
 
 export async function deleteMonth(req, res, next) {
   const userId = req.userId;
-  const data = req.validated;
+  const data = req.query;
 
   try {
     const deletedMonth = await deleteMonthFromDB(data.monthId, userId);
@@ -70,7 +70,7 @@ export async function deleteMonth(req, res, next) {
 
 export async function getMonthDetails(req, res, next) {
   const userId = req.userId;
-  const data = req.validated;
+  const data = req.query;
 
   try {
     const budgetDetails = await getMonthDetailsFromDB(userId, data.monthId);
