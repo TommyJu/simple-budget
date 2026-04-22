@@ -54,7 +54,7 @@ export async function editFixedExpense(req, res, next) {
 
 export async function deleteFixedExpense(req, res, next) {
   const userId = req.userId;
-  const data = req.validated;
+  const data = req.query;
 
   try {
     const deletedFixedExpense = await deleteFixedExpenseFromDB(

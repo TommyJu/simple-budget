@@ -5,6 +5,8 @@ const ExpenseForm = ({
   existingExpense,
   infoText = "",
   submitButtonText = "Submit",
+  deleteOnClick,
+  isDeleteButtonShown = false,
 }) => {
   const [form, setForm] = useState({
     amount: existingExpense.amount || "",
@@ -42,22 +44,6 @@ const ExpenseForm = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
       <p className="text-sm">{infoText}</p>
-      {/* Amount */}
-      <div>
-        <label className="label">
-          <span className="label-text">Amount ($)</span>
-        </label>
-        <input
-          name="amount"
-          type="number"
-          className="input input-bordered w-full validator"
-          min="0"
-          required
-          value={form.amount}
-          onChange={handleChange}
-          title={"Please enter a positive number"}
-        />
-      </div>
       {/* Description */}
       <div>
         <label className="label">
@@ -73,6 +59,22 @@ const ExpenseForm = ({
           value={form.description}
           onChange={handleChange}
           title={"Please enter a description"}
+        />
+      </div>
+      {/* Amount */}
+      <div>
+        <label className="label">
+          <span className="label-text">Amount ($)</span>
+        </label>
+        <input
+          name="amount"
+          type="number"
+          className="input input-bordered w-full validator"
+          min="0"
+          required
+          value={form.amount}
+          onChange={handleChange}
+          title={"Please enter a positive number"}
         />
       </div>
       {/* Category */}
@@ -97,6 +99,20 @@ const ExpenseForm = ({
       >
         {submitButtonText}
       </button>
+      {isDeleteButtonShown && (
+        <div>
+          <p className="text-error text-sm">Danger Zone</p>
+          <div className="border p-4 rounded-lg border-error">
+            <button
+              onClick={deleteOnClick}
+              type="button"
+              className="btn btn-error btn-sm"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
     </form>
   );
 };

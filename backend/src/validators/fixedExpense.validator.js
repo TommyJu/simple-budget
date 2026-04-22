@@ -12,7 +12,3 @@ export const editFixedExpenseSchema = z.object({
     category: z.enum(["needs", "wants", "savings"]),
     description: z.string().min(1, "Description cannot be empty").max(30),
 });
-
-export const deleteFixedExpenseSchema = z.object({
-    fixedExpenseId: z.coerce.bigint().min(1)
-});

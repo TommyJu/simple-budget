@@ -3,6 +3,7 @@ import useFixedExpenseStore from "../store/fixed-expense/useFixedExpenseStore";
 import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
 import ExpenseForm from "../components/forms/ExpenseForm";
+import ActionConfirmation from "../components/forms/ActionConfirmation";
 
 const FixedExpenses = () => {
   const {
@@ -13,13 +14,14 @@ const FixedExpenses = () => {
     createFixedExpense,
     isLoadingFixedExpenses,
     editFixedExpense,
+    deleteFixedExpense
   } = useFixedExpenseStore();
 
   const [activeModal, setActiveModal] = useState(null);
-  const [expenseToEdit, setExpenseToEdit] = useState(null);
+  const [selectedExpense, setSelectedExpense] = useState(null);
 
   const handleExpenseOnClick = (expense) => {
-    setExpenseToEdit(expense);
+    setSelectedExpense(expense);
     setActiveModal("editFixedExpense");
   };
 
@@ -120,17 +122,39 @@ const FixedExpenses = () => {
           title="Edit Fixed Expense"
           onClose={() => {
             setActiveModal(null);
-            setExpenseToEdit(null);
           }}
         >
           <ExpenseForm
             onSubmit={(payload) => {
               setActiveModal(null);
-              editFixedExpense({ fixedExpenseId: Number(expenseToEdit.id), ...payload });
+              editFixedExpense({ fixedExpenseId: Number(selectedExpense.id), ...payload });
             }}
-            existingExpense={expenseToEdit}
+            existingExpense={selectedExpense}
             submitButtonText="Save Changes"
+            isDeleteButtonShown={true}
+            deleteOnClick={()=>{
+              setActiveModal("deleteConfirmation");
+            }}
           />
+        </ModalWrapper>
+      )}
+      {activeModal === "deleteConfirmation" && (
+        <ModalWrapper
+          title="Are you sure you want to delete this fixed expense?"
+          onClose={() => {
+            setActiveModal(null);
+            setSelectedExpense(null);
+          }}
+        >
+         <ActionConfirmation
+          yesOnClick={() => {
+            deleteFixedExpense({fixedExpenseId: Number(selectedExpense.id)});
+            setActiveModal(null);
+          }}
+          noOnClick={() => {
+            setActiveModal(null);
+          }}
+         />
         </ModalWrapper>
       )}
     </div>

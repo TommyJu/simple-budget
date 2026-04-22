@@ -12,8 +12,10 @@ const fixedExpenseService = {
   editFixedExpense(data) {
     return axiosInstance.put("/fixed-expense/edit-fixed-expense", data);
   },
-  deleteFixedExpense(data) {
-    return axiosInstance.delete("/fixed-expense/delete-fixed-expense", data);
+  deleteFixedExpense(fixedExpenseId) {
+    return axiosInstance.delete("/fixed-expense/delete-fixed-expense", {
+      params: fixedExpenseId,
+    });
   },
 };
 
