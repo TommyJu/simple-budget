@@ -3,12 +3,24 @@ import MonthOverviewCard from "../components/cards/MonthOverviewCard";
 import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
 import CreateMonthForm from "../components/forms/CreateMonthForm";
-import { Loader } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const MonthlyOverview = () => {
-  const { monthOverviews, getMonthOverviews, createMonth, isMonthsLoading } =
-    useMonthStore();
+  const {
+    monthOverviews,
+    getMonthOverviews,
+    createMonth,
+    isMonthsLoading,
+    setSelectedMonthId,
+  } = useMonthStore();
   const [activeModal, setActiveModal] = useState(null);
+
+  const navigate = useNavigate();
+  const handleMonthOverviewOnClick = (monthId) => {
+    setSelectedMonthId(monthId);
+    navigate("/monthly-details");
+    console.log(monthId)
+  };
 
   useEffect(() => {
     getMonthOverviews();
@@ -28,10 +40,7 @@ const MonthlyOverview = () => {
             >
               + Create New Month
             </button>
-            <a
-              className="btn btn-md btn-secondary"
-              href="/fixed-expenses"
-            >
+            <a className="btn btn-md btn-secondary" href="/fixed-expenses">
               Manage Fixed Expenses
             </a>
           </div>
@@ -46,6 +55,9 @@ const MonthlyOverview = () => {
             <MonthOverviewCard
               key={monthOverview.id}
               monthOverview={monthOverview}
+              onClick={() => {
+                handleMonthOverviewOnClick(monthOverview.id);
+              }}
             />
           ))
         )}

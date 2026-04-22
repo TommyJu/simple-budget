@@ -6,6 +6,13 @@ import { handleToastErrorMessage } from "@/lib/utils";
 const useMonthStore = create((set) => ({
   isMonthsLoading: false,
   monthOverviews: [],
+  selectedMonthId: null,
+
+  setSelectedMonthId: (monthId) => {
+    set({
+      selectedMonthId: monthId,
+    });
+  },
 
   getMonthOverviews: async () => {
     set({ isMonthsLoading: true });
@@ -21,9 +28,7 @@ const useMonthStore = create((set) => ({
   createMonth: async (payloadData) => {
     set({ isMonthsLoading: true });
     try {
-      const response = await monthService.createMonth(
-        payloadData
-      );
+      const response = await monthService.createMonth(payloadData);
 
       const newMonth = response.data;
 

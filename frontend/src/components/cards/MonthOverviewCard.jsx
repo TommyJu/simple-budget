@@ -1,4 +1,4 @@
-const MonthOverviewCard = ({monthOverview}) => {
+const MonthOverviewCard = ({monthOverview, onClick}) => {
   if (!monthOverview) return null;
 
   const {
@@ -16,12 +16,12 @@ const MonthOverviewCard = ({monthOverview}) => {
   });
 
   return (
-    <div className="border rounded-lg p-4 shadow-md bg-base-200 w-full max-w-md hover:border-secondary">
+    <button onClick={onClick} className="border rounded-lg p-4 shadow-md bg-base-200 w-full max-w-md hover:border-secondary">
       <h2 className="text-xl font-semibold mb-4">
         {monthName} {year}
       </h2>
 
-      <div className="space-y-1 text-sm">
+      <div className="text-sm flex flex-col gap-2 items-start">
         <p>
           <span className="font-medium">Estimated Income:</span> ${income}
         </p>
@@ -30,7 +30,7 @@ const MonthOverviewCard = ({monthOverview}) => {
           <span className="font-medium">Total Spent:</span> ${total_spent}
         </p>
 
-        <hr className="my-2" />
+        <hr className="w-full" />
 
         <p>
           <span className="font-medium">Needs:</span> ${needs_spent}
@@ -44,7 +44,7 @@ const MonthOverviewCard = ({monthOverview}) => {
           <span className="font-medium">Savings:</span> ${savings_spent}
         </p>
       </div>
-    </div>
+    </button>
   );
 };
 
