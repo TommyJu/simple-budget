@@ -2,8 +2,7 @@ import ExpenseCard from "../components/cards/ExpenseCard";
 import useFixedExpenseStore from "../store/fixed-expense/useFixedExpenseStore";
 import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
-import CreateExpenseForm from "../components/forms/CreateExpenseForm";
-import { Loader } from "lucide-react";
+import ExpenseForm from "../components/forms/ExpenseForm";
 
 const FixedExpenses = () => {
   const {
@@ -13,9 +12,16 @@ const FixedExpenses = () => {
     getFixedExpenses,
     createFixedExpense,
     isLoadingFixedExpenses,
+    editFixedExpense,
   } = useFixedExpenseStore();
 
   const [activeModal, setActiveModal] = useState(null);
+  const [expenseToEdit, setExpenseToEdit] = useState(null);
+
+  const handleExpenseOnClick = (expense) => {
+    setExpenseToEdit(expense);
+    setActiveModal("editFixedExpense");
+  };
 
   useEffect(() => {
     getFixedExpenses();
@@ -88,6 +94,7 @@ const FixedExpenses = () => {
               description={expense.description}
               createdAt={expense.created_at}
               category={expense.category}
+              onClick={() => handleExpenseOnClick(expense)}
             />
           ))
         )}
@@ -98,11 +105,31 @@ const FixedExpenses = () => {
           title={"Create Fixed Expense"}
           onClose={() => setActiveModal(null)}
         >
-          <CreateExpenseForm
+          <ExpenseForm
             onSubmit={(payload) => {
               setActiveModal(null);
               createFixedExpense(payload);
             }}
+            infoText="Fixed expenses are recurring monthly payments that are automatically applied to each new budget."
+            submitButtonText="Create Fixed Expense"
+          />
+        </ModalWrapper>
+      )}
+      {activeModal === "editFixedExpense" && (
+        <ModalWrapper
+          title="Edit Fixed Expense"
+          onClose={() => {
+            setActiveModal(null);
+            setExpenseToEdit(null);
+          }}
+        >
+          <ExpenseForm
+            onSubmit={(payload) => {
+              setActiveModal(null);
+              editFixedExpense({ fixedExpenseId: Number(expenseToEdit.id), ...payload });
+            }}
+            existingExpense={expenseToEdit}
+            submitButtonText="Save Changes"
           />
         </ModalWrapper>
       )}

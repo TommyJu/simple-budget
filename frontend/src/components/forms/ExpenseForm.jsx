@@ -1,18 +1,28 @@
 import { useState } from "react";
 
-const CreateExpenseForm = ({ onSubmit, existingExpense }) => {
+const ExpenseForm = ({
+  onSubmit,
+  existingExpense,
+  infoText = "",
+  submitButtonText = "Submit",
+}) => {
   const [form, setForm] = useState({
-    amount: existingExpense?.amount || "",
-    description: existingExpense?.description || "",
-    category: existingExpense?.category || "",
+    amount: existingExpense.amount || "",
+    description: existingExpense.description || "",
+    category: existingExpense.category || "",
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const isFormComplete =
-    form.amount !== "" && form.description !== "" && form.category !== "";
+    form.amount !== "" &&
+    form.description.trim() !== "" &&
+    form.category !== "";
   const isAmountValid = Number(form.amount) >= 0;
   const isFormValid = isFormComplete && isAmountValid;
 
@@ -31,7 +41,7 @@ const CreateExpenseForm = ({ onSubmit, existingExpense }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-        <p className="text-sm">Fixed expenses are recurring monthly payments that are automatically applied to each new budget.</p>
+      <p className="text-sm">{infoText}</p>
       {/* Amount */}
       <div>
         <label className="label">
@@ -62,22 +72,22 @@ const CreateExpenseForm = ({ onSubmit, existingExpense }) => {
           required
           value={form.description}
           onChange={handleChange}
-          title={"Please enter a positive number"}
+          title={"Please enter a description"}
         />
       </div>
       {/* Category */}
-        <select
-          name="category"
-          className="select select-bordered w-1/2 validator"
-          required
-          value={form.category}
-          onChange={handleChange}
-        >
-          <option value="">Category</option>
-          <option value="needs">Needs</option>
-          <option value="wants">Wants</option>
-          <option value="savings">Savings</option>
-        </select>
+      <select
+        name="category"
+        className="select select-bordered w-1/2 validator"
+        required
+        value={form.category}
+        onChange={handleChange}
+      >
+        <option value="">Category</option>
+        <option value="needs">Needs</option>
+        <option value="wants">Wants</option>
+        <option value="savings">Savings</option>
+      </select>
 
       {/* Submit */}
       <button
@@ -85,10 +95,10 @@ const CreateExpenseForm = ({ onSubmit, existingExpense }) => {
         className="btn btn-primary w-full"
         disabled={!isFormValid}
       >
-        Create Fixed Expense
+        {submitButtonText}
       </button>
     </form>
   );
 };
 
-export default CreateExpenseForm;
+export default ExpenseForm;
