@@ -18,18 +18,18 @@ const MonthlyOverview = () => {
     <div className="flex flex-col h-dvh">
       <div className="flex flex-col overflow-scroll p-4 gap-4 items-center justify-start py-4">
         <div className="flex flex-col justify-center text-center p-4 w-full gap-6 flex-wrap">
-          <h2 className="text-4xl md:text-5xl px-4 text-primary indie-flower-regular">
+          <h2 className="text-5xl px-4 text-primary indie-flower-regular">
             Monthly Budgets
           </h2>
           <div className="flex gap-4 flex-wrap justify-center">
             <button
-              className="btn btn-sm md:btn-md btn-primary"
+              className="btn btn-md btn-primary"
               onClick={() => setActiveModal("createMonth")}
             >
               + Create New Month
             </button>
             <a
-              className="btn btn-sm md:btn-md btn-secondary"
+              className="btn btn-md btn-secondary"
               href="/fixed-expenses"
             >
               Manage Fixed Expenses

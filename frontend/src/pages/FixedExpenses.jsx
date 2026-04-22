@@ -23,7 +23,7 @@ const FixedExpenses = () => {
 
   return (
     <div className="flex flex-col items-center p-4 gap-8 h-dvh">
-      <h2 className="text-4xl md:text-5xl px-4 text-primary indie-flower-regular">
+      <h2 className="text-center text-5xl px-4 text-primary indie-flower-regular">
         Fixed Expenses
       </h2>
       <div className="w-full flex flex-wrap-reverse gap-8 justify-center">
