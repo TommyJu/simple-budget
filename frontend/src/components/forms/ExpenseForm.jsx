@@ -9,9 +9,9 @@ const ExpenseForm = ({
   isDeleteButtonShown = false,
 }) => {
   const [form, setForm] = useState({
-    amount: existingExpense.amount || "",
-    description: existingExpense.description || "",
-    category: existingExpense.category || "",
+    amount: existingExpense?.amount || "",
+    description: existingExpense?.description || "",
+    category: existingExpense?.category || "",
   });
 
   const handleChange = (e) => {
