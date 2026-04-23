@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
 import CreateMonthForm from "../components/forms/CreateMonthForm";
 import { useNavigate } from "react-router-dom";
+import NavBar from "../components/navbar/Navbar";
 
 const MonthlyOverview = () => {
   const {
@@ -12,8 +13,6 @@ const MonthlyOverview = () => {
     createMonth,
     isMonthsLoading,
     setSelectedMonthId,
-    getMonthDetails,
-    deleteMonth,
   } = useMonthStore();
   const [activeModal, setActiveModal] = useState(null);
 
@@ -21,7 +20,7 @@ const MonthlyOverview = () => {
   const handleMonthOverviewOnClick = (monthId) => {
     setSelectedMonthId(monthId);
     navigate("/monthly-details");
-    console.log(monthId)
+    console.log(monthId);
   };
 
   useEffect(() => {
@@ -32,9 +31,7 @@ const MonthlyOverview = () => {
     <div className="flex flex-col h-dvh">
       <div className="flex flex-col overflow-scroll p-4 gap-4 items-center justify-start py-4">
         <div className="flex flex-col justify-center text-center p-4 w-full gap-6 flex-wrap">
-          <h2 className="text-5xl px-4 text-primary indie-flower-regular">
-            Monthly Budgets
-          </h2>
+          <NavBar pageTitle="Monthly Budgets" isBackButtonShown={false} />
           <div className="flex gap-4 flex-wrap justify-center">
             <button
               className="btn btn-md btn-primary"

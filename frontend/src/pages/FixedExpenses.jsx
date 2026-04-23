@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ModalWrapper from "../components/modals/ModalWrapper";
 import ExpenseForm from "../components/forms/ExpenseForm";
 import ActionConfirmation from "../components/forms/ActionConfirmation";
+import NavBar from "../components/navbar/Navbar";
 
 const FixedExpenses = () => {
   const {
@@ -14,7 +15,7 @@ const FixedExpenses = () => {
     createFixedExpense,
     isLoadingFixedExpenses,
     editFixedExpense,
-    deleteFixedExpense
+    deleteFixedExpense,
   } = useFixedExpenseStore();
 
   const [activeModal, setActiveModal] = useState(null);
@@ -30,10 +31,8 @@ const FixedExpenses = () => {
   }, [currentFilter]);
 
   return (
-    <div className="flex flex-col items-center p-4 gap-8 h-dvh">
-      <h2 className="text-center text-5xl px-4 text-primary indie-flower-regular">
-        Fixed Expenses
-      </h2>
+    <div className="flex flex-col items-center p-8 gap-8 h-dvh">
+      <NavBar pageTitle="Fixed Expenses" isBackButtonShown={true} />
       <div className="w-full flex flex-wrap-reverse gap-8 justify-center">
         {/* Category Filter */}
 
@@ -127,12 +126,15 @@ const FixedExpenses = () => {
           <ExpenseForm
             onSubmit={(payload) => {
               setActiveModal(null);
-              editFixedExpense({ fixedExpenseId: Number(selectedExpense.id), ...payload });
+              editFixedExpense({
+                fixedExpenseId: Number(selectedExpense.id),
+                ...payload,
+              });
             }}
             existingExpense={selectedExpense}
             submitButtonText="Save Changes"
             isDeleteButtonShown={true}
-            deleteOnClick={()=>{
+            deleteOnClick={() => {
               setActiveModal("deleteConfirmation");
             }}
           />
@@ -146,15 +148,17 @@ const FixedExpenses = () => {
             setSelectedExpense(null);
           }}
         >
-         <ActionConfirmation
-          yesOnClick={() => {
-            deleteFixedExpense({fixedExpenseId: Number(selectedExpense.id)});
-            setActiveModal(null);
-          }}
-          noOnClick={() => {
-            setActiveModal(null);
-          }}
-         />
+          <ActionConfirmation
+            yesOnClick={() => {
+              deleteFixedExpense({
+                fixedExpenseId: Number(selectedExpense.id),
+              });
+              setActiveModal(null);
+            }}
+            noOnClick={() => {
+              setActiveModal(null);
+            }}
+          />
         </ModalWrapper>
       )}
     </div>
