@@ -5,7 +5,7 @@ import {
   MAX_PASSWORD_LENGTH,
   MIN_USERNAME_LENGTH,
   MAX_USERNAME_LENGTH,
-} from "../../../shared/auth.constants";
+} from "@/constants/auth";
 import { Loader2 } from "lucide-react";
 
 export const Login = () => {

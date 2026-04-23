@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DESCRIPTION_MAX_LENGTH } from "../../constants/schema";
 
 const ExpenseForm = ({
   onSubmit,
@@ -54,7 +55,7 @@ const ExpenseForm = ({
           type="text"
           className="input input-bordered w-full validator"
           minLength="1"
-          maxLength="30"
+          maxLength={DESCRIPTION_MAX_LENGTH}
           required
           value={form.description}
           onChange={handleChange}

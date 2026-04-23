@@ -38,7 +38,7 @@ CREATE TABLE months (
 -- Fixed expenses table
 CREATE TABLE fixed_expenses (
   id BIGSERIAL PRIMARY KEY,
-  amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0),
+  amount INT NOT NULL CHECK (amount >= 0),
   category expense_category NOT NULL,
   description VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -48,7 +48,7 @@ CREATE TABLE fixed_expenses (
 -- Transactions table
 CREATE TABLE transactions (
   id BIGSERIAL PRIMARY KEY,
-  amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0),
+  amount INT NOT NULL CHECK (amount >= 0),
   category expense_category NOT NULL,
   description VARCHAR(255),
   is_fixed_expense BOOLEAN DEFAULT false,

@@ -5,7 +5,7 @@ import {
   NUM_SALT_ROUNDS_FOR_PASSWORD_HASH,
   MIN_USERNAME_LENGTH,
   MAX_USERNAME_LENGTH,
-} from "../../../shared/auth.constants.js";
+} from "../constants/auth.constant.js";
 import { AppError } from "../utils/errorHandling.js";
 import pool from "../lib/db.js";
 
