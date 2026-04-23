@@ -15,8 +15,10 @@ const NavBar = ({ pageTitle, isBackButtonShown }) => {
         {pageTitle}
       </h2>
       <div className="w-10 flex justify-end">
-        <Settings className="cursor-pointer" />
+        <Settings className="cursor-pointer" onClick={() => navigate("/settings")} />
       </div>
+      
+
     </div>
   );
 };

@@ -12,6 +12,7 @@ import SignUp from "@/pages/SignUp";
 import MonthlyOverview from "@/pages/MonthlyOverview";
 import MonthlyDetails from "@/pages/MonthlyDetails";
 import FixedExpenses from "./pages/FixedExpenses";
+import Settings from "./pages/Settings";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -60,6 +61,10 @@ function App() {
         <Route
           path="/fixed-expenses"
           element={authUser ? <FixedExpenses /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/settings"
+          element={authUser ? <Settings /> : <Navigate to="/" />}
         />
       </Routes>
 
