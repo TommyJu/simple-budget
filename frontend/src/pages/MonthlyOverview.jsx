@@ -44,8 +44,8 @@ const MonthlyOverview = () => {
             </a>
           </div>
         </div>
-        {!monthOverviews && !isMonthsLoading ? (
-          <p className="text-lg font-bold">
+        {monthOverviews.length < 1 && !isMonthsLoading ? (
+          <p className="text-lg font-bold text-center mt-20">
             Looks like there are no budgets yet. <br />
             Use the "+ Create New Month" button to get started! 💸
           </p>

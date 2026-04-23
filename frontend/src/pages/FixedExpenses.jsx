@@ -81,8 +81,8 @@ const FixedExpenses = () => {
       </div>
 
       {/* Fixed Expenses */}
-      <div className="w-full flex flex-col items-center gap-4">
-        {!fixedExpenses && !isLoadingFixedExpenses ? (
+      <div className="w-full flex flex-col items-center gap-4 mt-20">
+        {fixedExpenses.length < 1 && !isLoadingFixedExpenses ? (
           <p className="text-lg font-bold text-center">
             No fixed expenses found. <br />
             Click “Create New Fixed Expense” to add one 💸
