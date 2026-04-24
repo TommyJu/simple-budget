@@ -34,7 +34,7 @@ const useMonthStore = create((set) => ({
       const newMonth = response.data;
 
       set((state) => ({
-        monthOverviews: [...state.monthOverviews, newMonth],
+        monthOverviews: [newMonth, ...state.monthOverviews],
       }));
       toast.success("Monthly budget created successfully");
     } catch (error) {

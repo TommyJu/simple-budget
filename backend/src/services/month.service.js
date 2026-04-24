@@ -12,46 +12,53 @@ export const addMonthToDB = async (
   savingsPercentage,
   userId,
 ) => {
-  const query = `
-    WITH new_month AS (
+  try {
+    // Insert month
+    const insertQuery = `
       INSERT INTO months 
         (year, month, income, needs_percentage, wants_percentage, savings_percentage, user_id)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING *
-    )
-    SELECT
-      nm.id,
-      nm.year,
-      nm.month,
-      nm.income,
+      RETURNING id;
+    `;
 
-      COALESCE(SUM(t.amount), 0) AS total_spent,
+    const { rows } = await pool.query(insertQuery, [
+      year,
+      month,
+      income,
+      needsPercentage,
+      wantsPercentage,
+      savingsPercentage,
+      userId,
+    ]);
 
-      COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'needs'), 0) AS needs_spent,
-      COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'wants'), 0) AS wants_spent,
-      COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'savings'), 0) AS savings_spent
+    const monthId = rows[0].id;
 
-    FROM new_month nm
-    LEFT JOIN transactions t ON t.month_id = nm.id
-    GROUP BY nm.id, nm.year, nm.month, nm.income;
-  `;
-  const values = [
-    year,
-    month,
-    income,
-    needsPercentage,
-    wantsPercentage,
-    savingsPercentage,
-    userId,
-  ];
+    await addFixedExpensesToMonth(userId, monthId);
 
-  try {
-    const { rows } = await pool.query(query, values);
-    const createdMonth = rows[0];
+    // Get full computed details after adding fixed expenses
+    const detailsQuery = `
+      SELECT
+        m.id,
+        m.year,
+        m.month,
+        m.income,
 
-    await addFixedExpensesToMonth(userId, createdMonth.id);
+        COALESCE(SUM(t.amount), 0) AS total_spent,
 
-    return createdMonth;
+        COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'needs'), 0) AS needs_spent,
+        COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'wants'), 0) AS wants_spent,
+        COALESCE(SUM(t.amount) FILTER (WHERE t.category = 'savings'), 0) AS savings_spent
+
+      FROM months m
+      LEFT JOIN transactions t ON t.month_id = m.id
+      WHERE m.id = $1
+      GROUP BY m.id;
+    `;
+
+    const { rows: detailsRows } = await pool.query(detailsQuery, [monthId]);
+
+    return detailsRows[0];
+
   } catch (error) {
     if (error.code === "23505") {
       throw new AppError("Month already exists", 409);
