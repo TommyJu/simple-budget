@@ -194,7 +194,10 @@ export async function getMonthDetailsFromDB(userId, monthId) {
   `;
   const values = [userId, monthId];
 
-  const { rows } = await pool.query(query, values);
+  const { rows, rowCount } = await pool.query(query, values);
+  if (rowCount < 1) {
+    throw new AppError("Month details not found", 404);
+  }
   const budgetDetails = rows[0];
   return budgetDetails;
 }

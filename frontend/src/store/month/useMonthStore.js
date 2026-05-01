@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import monthService from "../../services/monthService";
 import { handleToastErrorMessage } from "@/lib/utils";
 
-const useMonthStore = create((set) => ({
+const useMonthStore = create((set, get) => ({
   isMonthsLoading: false,
   monthOverviews: [],
   selectedMonthId: null,
@@ -44,10 +44,10 @@ const useMonthStore = create((set) => ({
     }
   },
 
-  getMonthDetails: async (monthId) => {
+  getMonthDetails: async () => {
     set({ isMonthsLoading: true });
     try {
-      const response = await monthService.getMonthDetails(monthId);
+      const response = await monthService.getMonthDetails({ monthId: get().selectedMonthId });
       set({
         selectedMonthDetails: response.data,
       });
@@ -76,7 +76,7 @@ const useMonthStore = create((set) => ({
   deleteMonth: async (monthId) => {
     set({ isMonthsLoading: true });
     try {
-      const response = await monthService.deleteMonth(monthId);
+      const response = await monthService.deleteMonth({ monthId: get().selectedMonthId });
   
       set({selectedMonthDetails: null});
       set({selectedMonthId: null});

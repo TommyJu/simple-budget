@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { MIN_PASSWORD_LENGTH } from "@/../../shared/auth.constants";
+import { MIN_PASSWORD_LENGTH } from "@/constants/auth.js";
 
 export const handleToastErrorMessage = (error) => {
   console.error(error);
@@ -21,3 +21,12 @@ export const validateSignupForm = ({ fullName, email, password }) => {
 
   return true;
 };
+
+export function formatMonthYear(year, month) {
+  const date = new Date(year, month - 1); // JS months are 0-based
+
+  return date.toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+}

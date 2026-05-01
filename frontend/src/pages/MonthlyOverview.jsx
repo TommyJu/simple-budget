@@ -20,7 +20,6 @@ const MonthlyOverview = () => {
   const handleMonthOverviewOnClick = (monthId) => {
     setSelectedMonthId(monthId);
     navigate("/monthly-details");
-    console.log(monthId);
   };
 
   useEffect(() => {
