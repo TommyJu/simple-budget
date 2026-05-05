@@ -9,7 +9,7 @@ const Settings = () => {
 
   return (
     <div className="flex flex-col items-center p-8 gap-8">
-      <NavBar pageTitle="Settings" isBackButtonShown={true} />
+      <NavBar pageTitle="Settings" isBackButtonShown={true} isSettingsButtonShown={false} />
       
         <h2 className="text-xl font-bold">Theme Customization</h2>
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">

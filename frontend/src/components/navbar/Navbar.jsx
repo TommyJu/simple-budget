@@ -1,7 +1,11 @@
 import { ArrowLeft, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const NavBar = ({ pageTitle, isBackButtonShown }) => {
+const NavBar = ({
+  pageTitle,
+  isBackButtonShown = true,
+  isSettingsButtonShown = true,
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -15,10 +19,13 @@ const NavBar = ({ pageTitle, isBackButtonShown }) => {
         {pageTitle}
       </h2>
       <div className="w-10 flex justify-end">
-        <Settings className="cursor-pointer" onClick={() => navigate("/settings")} />
+        {isSettingsButtonShown && (
+          <Settings
+            className="cursor-pointer"
+            onClick={() => navigate("/settings")}
+          />
+        )}
       </div>
-      
-
     </div>
   );
 };
