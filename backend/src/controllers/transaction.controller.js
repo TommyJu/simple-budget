@@ -26,7 +26,7 @@ export async function createTransaction(req, res, next) {
 // Gets all transactions for a monthly budget, filtered by category (optional)
 export async function getTransactions(req, res, next) {
   const userId = req.userId;
-  const data = req.validated;
+  const data = req.query;
   try {
     const transactions = await getTransactionsFromDB(
       userId,
@@ -61,7 +61,7 @@ export async function editTransaction(req, res, next) {
 // Deletes an existing transaction that belongs to the authenticated user
 export async function deleteTransaction(req, res, next) {
     const userId = req.userId;
-    const data = req.validated;
+    const data = req.query;
     try {
         const deletedTransaction = await deleteTransactionFromDB(
             userId,
