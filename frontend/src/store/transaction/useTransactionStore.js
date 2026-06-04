@@ -25,20 +25,20 @@ const useTransactionStore = create((set, get) => ({
       }
       toast.success("Transaction created successfully");
     } catch (error) {
-        handleToastErrorMessage(error, "Failed to create transaction");
+      handleToastErrorMessage(error, "Failed to create transaction");
     } finally {
       set({ isLoadingTransactions: false });
     }
   },
   getTransactions: async function (data) {
     set({ isLoadingTransactions: true });
-    const { currentFilter } = get();
-    const response = await transactionService.getTransactions(data);
-    const transactions = response.data;
-    set({ transactions: transactions});
     try {
+      const { currentFilter } = get();
+      const response = await transactionService.getTransactions(data);
+      const transactions = response.data;
+      set({ transactions: transactions });
     } catch (error) {
-        handleToastErrorMessage(error, "Failed to fetch transactions");
+      handleToastErrorMessage(error, "Failed to fetch transactions");
     } finally {
       set({ isLoadingTransactions: false });
     }
@@ -46,11 +46,13 @@ const useTransactionStore = create((set, get) => ({
   editTransaction: async function (data) {
     set({ isLoadingTransactions: true });
     try {
-        const response = await transactionService.editTransaction(data);
-        const editedTransaction = response.data;
-        set((state) => ({
+      const response = await transactionService.editTransaction(data);
+      const editedTransaction = response.data;
+      set((state) => ({
         transactions: state.transactions.map((transaction) =>
-          transaction.id === editedTransaction.id ? editedTransaction : transaction,
+          transaction.id === editedTransaction.id
+            ? editedTransaction
+            : transaction,
         ),
       }));
       toast.success("Transaction saved");
@@ -62,9 +64,9 @@ const useTransactionStore = create((set, get) => ({
   deleteTransaction: async function (data) {
     set({ isLoadingTransactions: true });
     try {
-        const response = await transactionService.deleteTransaction(data);
-        const deletedTransaction = response.data;
-        set((state) => ({
+      const response = await transactionService.deleteTransaction(data);
+      const deletedTransaction = response.data;
+      set((state) => ({
         transactions: state.transactions.filter(
           (transaction) => transaction.id !== deletedTransaction.id,
         ),
@@ -76,3 +78,5 @@ const useTransactionStore = create((set, get) => ({
     }
   },
 }));
+
+export default useTransactionStore;

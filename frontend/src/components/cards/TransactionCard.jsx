@@ -1,4 +1,4 @@
-const TransactionCard = ({ amount, description, createdAt, category }) => {
+const TransactionCard = ({ amount, description, createdAt, category, isFixedExpense }) => {
   const date = new Date(createdAt);
 
   const formattedDate = date.toLocaleDateString("en-US", {
@@ -35,6 +35,9 @@ const TransactionCard = ({ amount, description, createdAt, category }) => {
         </label>
         <p className="text-sm">{formattedDate}</p>
       </div>
+      {isFixedExpense && 
+        <p className="text-sm text-secondary italic">Fixed Expense</p>
+      }
     </button>
   );
 };

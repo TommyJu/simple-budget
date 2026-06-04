@@ -2,10 +2,10 @@ import { axiosInstance } from "@/lib/axios";
 
 const TransactionService = {
   createTransaction(data) {
-    return axiosInstance.post("/create-transaction", data);
+    return axiosInstance.post("/transaction/create-transaction", data);
   },
-  getTransactions({ monthId, category }) {
-    return axiosInstance.get("/get-transactions", {
+  getTransactions({ monthId, category = 'all' }) {
+    return axiosInstance.get("/transaction/get-transactions", {
       params: {
         monthId: monthId,
         category: category,
@@ -13,10 +13,10 @@ const TransactionService = {
     });
   },
   editTransaction(data) {
-    return axiosInstance.put("/edit-transaction", data);
+    return axiosInstance.put("/transaction/edit-transaction", data);
   },
   deleteTransaction(transactionId) {
-    return axiosInstance.delete("/delete-transaction", {
+    return axiosInstance.delete("/transaction/delete-transaction", {
       params: transactionId,
     });
   },
