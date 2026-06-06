@@ -5,6 +5,8 @@ import NavBar from "../components/navbar/Navbar";
 import { formatMonthYear } from "../lib/utils";
 import useTransactionStore from "../store/transaction/useTransactionStore";
 import TransactionCard from "../components/cards/TransactionCard";
+import ExpenseForm from "../components/forms/ExpenseForm";
+import ModalWrapper from "../components/modals/ModalWrapper";
 
 const MonthlyDetails = () => {
   const {
@@ -25,6 +27,8 @@ const MonthlyDetails = () => {
     editTransaction,
     deleteTransaction,
   } = useTransactionStore();
+
+  const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
     getMonthDetails();
@@ -47,7 +51,10 @@ const MonthlyDetails = () => {
         <div className="flex flex-col items-center gap-10">
           <BudgetDetails data={selectedMonthDetails} />
           <h4 className="text-3xl font-bold">Transaction History</h4>
-          <button className="btn btn-secondary w-[80%] max-w-md mx-4">
+          <button
+            onClick={() => setActiveModal("createTransaction")}
+            className="btn btn-secondary w-[80%] max-w-md mx-4"
+          >
             Add Transaction
           </button>
         </div>
@@ -73,6 +80,40 @@ const MonthlyDetails = () => {
           ))
         )}
       </div>
+      {/* Forms */}
+      {activeModal === "createTransaction" && (
+        <ModalWrapper
+          title="Create Transaction"
+          onClose={() => setActiveModal(null)}
+        >
+          <ExpenseForm
+            monthId={selectedMonthDetails?.id}
+            onSubmit={async (payload) => {
+              await createTransaction(payload);
+              await getMonthDetails();
+              setActiveModal(null);
+            }}
+            infoText={
+              <div>
+                <p>
+                  A transaction is an expense dedicated to your needs, wants, or
+                  savings. By adding a transaction you can keep track of your
+                  spending in each of these categories.
+                </p>
+                <a
+                  className="underline text-secondary"
+                  href="https://www.wealthsimple.com/en-ca/learn/50-30-20-rule"
+                  target="_blank"
+                >
+                  Learn more.
+                </a>
+              </div>
+            }
+            submitButtonText="Save"
+            isDeleteButtonShown={false}
+          />
+        </ModalWrapper>
+      )}
     </div>
   );
 };

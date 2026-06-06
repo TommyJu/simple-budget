@@ -6,8 +6,9 @@ const ExpenseForm = ({
   existingExpense,
   infoText = "",
   submitButtonText = "Submit",
-  deleteOnClick,
+  deleteOnClick = null,
   isDeleteButtonShown = false,
+  monthId,
 }) => {
   const [form, setForm] = useState({
     amount: existingExpense?.amount || "",
@@ -39,12 +40,16 @@ const ExpenseForm = ({
       category: form.category,
     };
 
+    if (monthId !== null) {
+      payload.monthId = monthId;
+    }
+
     onSubmit?.(payload);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-      <p className="text-sm">{infoText}</p>
+      <div className="text-sm">{infoText}</div>
       {/* Description */}
       <div>
         <label className="label">
