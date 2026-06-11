@@ -57,7 +57,7 @@ const useTransactionStore = create((set, get) => ({
             : transaction,
         ),
       }));
-      toast.success("Transaction saved");
+      toast.success("Transaction details saved");
     } catch (error) {
     } finally {
       set({ isLoadingTransactions: false });

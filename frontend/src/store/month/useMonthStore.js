@@ -66,7 +66,7 @@ const useMonthStore = create((set, get) => ({
       set({
         selectedMonthDetails: updatedMonthDetails,
       });
-      toast.success("Month saved");
+      toast.success("Month details saved");
     } catch (error) {
       handleToastErrorMessage(error, "Failed to edit month");
     } finally {
