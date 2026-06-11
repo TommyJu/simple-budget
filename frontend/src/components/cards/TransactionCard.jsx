@@ -1,4 +1,11 @@
-const TransactionCard = ({ amount, description, createdAt, category, isFixedExpense, onClick }) => {
+const TransactionCard = ({
+  amount,
+  description,
+  createdAt,
+  category,
+  isFixedExpense,
+  onClick,
+}) => {
   const date = new Date(createdAt);
 
   const formattedDate = date.toLocaleDateString("en-US", {
@@ -10,34 +17,63 @@ const TransactionCard = ({ amount, description, createdAt, category, isFixedExpe
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
 
   return (
-    <button onClick={onClick} className="hover:border-secondary flex flex-wrap gap-4 p-4 border rounded-lg justify-evenly w-full md:w-[80%]">
-      <div className="flex flex-col items-start">
-        <label className="label">
-          <span className="label-text">DESCRIPTION</span>
-        </label>
-        <p className="text-sm">{capitalize(description)}</p>
+    <button
+      onClick={onClick}
+      className="
+        w-full md:w-[80%]
+        p-4 border rounded-lg
+        hover:border-secondary hover:bg-base-200
+        transition
+        text-left
+      "
+    >
+      {/* GRID HEADER (desktop) / STACK (mobile) */}
+      <div
+        className="
+          grid grid-cols-1 md:grid-cols-4 gap-3 md:items-center
+        "
+      >
+        {/* DESCRIPTION */}
+        <div className="flex md:block justify-between">
+          <span className="text-xs text-base-content/60 md:hidden">
+            DESCRIPTION
+          </span>
+          <p className="text-sm">{capitalize(description)}</p>
+        </div>
+
+        {/* AMOUNT (more important visually) */}
+        <div className="flex md:block justify-between">
+          <span className="text-xs text-base-content/60 md:hidden">
+            AMOUNT
+          </span>
+          <p className="text-lg font-semibold">${amount}</p>
+        </div>
+
+        {/* CATEGORY */}
+        <div className="flex md:block justify-between">
+          <span className="text-xs text-base-content/60 md:hidden">
+            CATEGORY
+          </span>
+          <p className="text-sm">{capitalize(category)}</p>
+        </div>
+
+        {/* DATE */}
+        <div className="flex md:block justify-between">
+          <span className="text-xs text-base-content/60 md:hidden">
+            DATE
+          </span>
+          <p className="text-sm">{formattedDate}</p>
+        </div>
       </div>
-      <div className="flex flex-col items-start">
-        <label className="label">
-          <span className="label-text">AMOUNT</span>
-        </label>
-        <p className="text-sm">${amount}</p>
-      </div>
-      <div className="flex flex-col items-start">
-        <label className="label">
-          <span className="label-text">CATEGORY</span>
-        </label>
-        <p className="text-sm">{capitalize(category)}</p>
-      </div>
-      <div className="flex flex-col items-start">
-        <label className="label">
-          <span className="label-text">DATE ADDED</span>
-        </label>
-        <p className="text-sm">{formattedDate}</p>
-      </div>
-      {isFixedExpense && 
-        <p className="text-sm text-secondary italic">Fixed Expense</p>
-      }
+
+      {/* FIXED EXPENSE BADGE */}
+      {isFixedExpense && (
+        <div className="mt-3">
+          <span className="text-xs text-secondary italic">
+            Fixed Expense
+          </span>
+        </div>
+      )}
     </button>
   );
 };
