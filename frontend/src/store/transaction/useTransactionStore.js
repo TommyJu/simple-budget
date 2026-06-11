@@ -8,6 +8,8 @@ const useTransactionStore = create((set, get) => ({
   currentFilter: "all",
   isLoadingTransactions: false,
 
+  setFilter: (filter) => set({ currentFilter: filter }),
+
   createTransaction: async function (data) {
     set({ isLoadingTransactions: true });
     try {
@@ -34,7 +36,7 @@ const useTransactionStore = create((set, get) => ({
     set({ isLoadingTransactions: true });
     try {
       const { currentFilter } = get();
-      const response = await transactionService.getTransactions(data);
+      const response = await transactionService.getTransactions({category: currentFilter, ...data});
       const transactions = response.data;
       set({ transactions: transactions });
     } catch (error) {

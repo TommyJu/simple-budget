@@ -23,6 +23,7 @@ const MonthlyDetails = () => {
   const {
     transactions,
     currentFilter,
+    setFilter,
     getTransactions,
     createTransaction,
     editTransaction,
@@ -45,9 +46,8 @@ const MonthlyDetails = () => {
   useEffect(() => {
     if (selectedMonthDetails) {
       getTransactions({ monthId: selectedMonthDetails.id });
-      console.log(selectedMonthDetails);
     }
-  }, [selectedMonthDetails]);
+  }, [selectedMonthDetails, currentFilter]);
 
   return (
     <div className="flex flex-col w-full p-8 gap-8">
@@ -65,6 +65,44 @@ const MonthlyDetails = () => {
           >
             Add Transaction
           </button>
+          {/* Category Filter */}
+
+          <form className="filter" onReset={() => setFilter("all")}>
+            {/* Reset → All */}
+            <input
+              className="btn btn-square"
+              type="reset"
+              value="×"
+              title="All"
+            />
+
+            <input
+              className="btn"
+              type="radio"
+              name="expense-filter"
+              aria-label="Needs"
+              checked={currentFilter === "needs"}
+              onChange={() => setFilter("needs")}
+            />
+
+            <input
+              className="btn"
+              type="radio"
+              name="expense-filter"
+              aria-label="Wants"
+              checked={currentFilter === "wants"}
+              onChange={() => setFilter("wants")}
+            />
+
+            <input
+              className="btn"
+              type="radio"
+              name="expense-filter"
+              aria-label="Savings"
+              checked={currentFilter === "savings"}
+              onChange={() => setFilter("savings")}
+            />
+          </form>
         </div>
       )}
       {/* Transactions */}
@@ -130,7 +168,10 @@ const MonthlyDetails = () => {
           <ExpenseForm
             monthId={selectedMonthDetails?.id}
             onSubmit={async (payload) => {
-              await editTransaction({transactionId: selectedTransaction.id, ...payload});
+              await editTransaction({
+                transactionId: selectedTransaction.id,
+                ...payload,
+              });
               await getMonthDetails();
               setActiveModal(null);
             }}
@@ -155,7 +196,7 @@ const MonthlyDetails = () => {
           <ActionConfirmation
             yesOnClick={() => {
               deleteTransaction({
-                transactionId: selectedTransaction.id
+                transactionId: selectedTransaction.id,
               });
               setActiveModal(null);
             }}
