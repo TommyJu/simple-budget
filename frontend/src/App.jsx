@@ -13,6 +13,7 @@ import MonthlyOverview from "@/pages/MonthlyOverview";
 import MonthlyDetails from "@/pages/MonthlyDetails";
 import FixedExpenses from "./pages/FixedExpenses";
 import Settings from "./pages/Settings";
+import NotFound from "./pages/NotFound";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -66,6 +67,7 @@ function App() {
           path="/settings"
           element={authUser ? <Settings /> : <Navigate to="/" />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Toaster
