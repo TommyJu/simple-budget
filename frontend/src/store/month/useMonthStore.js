@@ -66,6 +66,7 @@ const useMonthStore = create((set, get) => ({
       set({
         selectedMonthDetails: updatedMonthDetails,
       });
+      toast.success("Month saved");
     } catch (error) {
       handleToastErrorMessage(error, "Failed to edit month");
     } finally {
@@ -80,7 +81,7 @@ const useMonthStore = create((set, get) => ({
   
       set({selectedMonthDetails: null});
       set({selectedMonthId: null});
-
+      toast.success("Month deleted successfully");
     } catch (error) {
       handleToastErrorMessage(error, "Failed to delete month");
     } finally {
