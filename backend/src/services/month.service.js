@@ -58,7 +58,6 @@ export const addMonthToDB = async (
     const { rows: detailsRows } = await pool.query(detailsQuery, [monthId]);
 
     return detailsRows[0];
-
   } catch (error) {
     if (error.code === "23505") {
       throw new AppError("Month already exists", 409);
@@ -153,6 +152,10 @@ export async function getMonthDetailsFromDB(userId, monthId) {
       m.year,
       m.month,
       m.income,
+
+      m.needs_percentage,
+      m.wants_percentage,
+      m.savings_percentage,
 
 
 

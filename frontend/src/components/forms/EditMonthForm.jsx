@@ -15,9 +15,9 @@ const EditMonthForm = ({ onSubmit, existingMonth, deleteOnClick }) => {
 
     setForm({
       income: existingMonth.income?.toString() ?? "",
-      needs: existingMonth.needsPercentage?.toString() ?? "50",
-      wants: existingMonth.wantsPercentage?.toString() ?? "30",
-      savings: existingMonth.savingsPercentage?.toString() ?? "20",
+      needs: existingMonth.needs_percentage?.toString() ?? "50",
+      wants: existingMonth.wants_percentage?.toString() ?? "30",
+      savings: existingMonth.savings_percentage?.toString() ?? "20",
     });
   }, [existingMonth]);
 
