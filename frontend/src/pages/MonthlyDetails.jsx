@@ -7,6 +7,7 @@ import useTransactionStore from "../store/transaction/useTransactionStore";
 import TransactionCard from "../components/cards/TransactionCard";
 import ExpenseForm from "../components/forms/ExpenseForm";
 import ModalWrapper from "../components/modals/ModalWrapper";
+import ActionConfirmation from "../components/forms/ActionConfirmation";
 
 const MonthlyDetails = () => {
   const {
@@ -29,6 +30,13 @@ const MonthlyDetails = () => {
   } = useTransactionStore();
 
   const [activeModal, setActiveModal] = useState(null);
+
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+
+  const handleTransactionOnClick = (transaction) => {
+    setSelectedTransaction(transaction);
+    setActiveModal("editTransaction");
+  };
 
   useEffect(() => {
     getMonthDetails();
@@ -109,8 +117,51 @@ const MonthlyDetails = () => {
                 </a>
               </div>
             }
-            submitButtonText="Save"
+            submitButtonText="Create Transaction"
             isDeleteButtonShown={false}
+          />
+        </ModalWrapper>
+      )}
+      {activeModal === "editTransaction" && (
+        <ModalWrapper
+          title="Edit Transaction"
+          onClose={() => setActiveModal(null)}
+        >
+          <ExpenseForm
+            monthId={selectedMonthDetails?.id}
+            onSubmit={async (payload) => {
+              await editTransaction({transactionId: selectedTransaction.id, ...payload});
+              await getMonthDetails();
+              setActiveModal(null);
+            }}
+            existingExpense={selectedTransaction}
+            infoText={<p>Edit the details of an existing transaction.</p>}
+            submitButtonText="Save Changes"
+            isDeleteButtonShown={true}
+            deleteOnClick={() => {
+              setActiveModal("deleteConfirmation");
+            }}
+          />
+        </ModalWrapper>
+      )}
+      {activeModal === "deleteConfirmation" && (
+        <ModalWrapper
+          title="Are you sure you want to delete this transaction?"
+          onClose={() => {
+            setActiveModal(null);
+            setSelectedTranscation(null);
+          }}
+        >
+          <ActionConfirmation
+            yesOnClick={() => {
+              deleteTransaction({
+                transactionId: selectedTransaction.id
+              });
+              setActiveModal(null);
+            }}
+            noOnClick={() => {
+              setActiveModal(null);
+            }}
           />
         </ModalWrapper>
       )}

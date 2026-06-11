@@ -1,4 +1,4 @@
-const TransactionCard = ({ amount, description, createdAt, category, isFixedExpense }) => {
+const TransactionCard = ({ amount, description, createdAt, category, isFixedExpense, onClick }) => {
   const date = new Date(createdAt);
 
   const formattedDate = date.toLocaleDateString("en-US", {
@@ -10,7 +10,7 @@ const TransactionCard = ({ amount, description, createdAt, category, isFixedExpe
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
 
   return (
-    <button className="hover:border-secondary flex flex-wrap gap-4 p-4 border rounded-lg justify-evenly w-full md:w-[80%]">
+    <button onClick={onClick} className="hover:border-secondary flex flex-wrap gap-4 p-4 border rounded-lg justify-evenly w-full md:w-[80%]">
       <div className="flex flex-col items-start">
         <label className="label">
           <span className="label-text">DESCRIPTION</span>

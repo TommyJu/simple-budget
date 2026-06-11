@@ -127,7 +127,7 @@ const FixedExpenses = () => {
             onSubmit={(payload) => {
               setActiveModal(null);
               editFixedExpense({
-                fixedExpenseId: Number(selectedExpense.id),
+                fixedExpenseId: selectedExpense.id,
                 ...payload,
               });
             }}
@@ -151,7 +151,7 @@ const FixedExpenses = () => {
           <ActionConfirmation
             yesOnClick={() => {
               deleteFixedExpense({
-                fixedExpenseId: Number(selectedExpense.id),
+                fixedExpenseId: selectedExpense.id,
               });
               setActiveModal(null);
             }}
