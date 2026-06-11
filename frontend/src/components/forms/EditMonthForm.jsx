@@ -1,0 +1,188 @@
+import { useState, useEffect } from "react";
+
+const EditMonthForm = ({ onSubmit, existingMonth, deleteOnClick }) => {
+  const [form, setForm] = useState({
+    income: "",
+    needs: "50",
+    wants: "30",
+    savings: "20",
+  });
+
+
+  // Populate fields with existingMonth data   
+  useEffect(() => {
+    if (!existingMonth) return;
+
+    setForm({
+      income: existingMonth.income?.toString() ?? "",
+      needs: existingMonth.needsPercentage?.toString() ?? "50",
+      wants: existingMonth.wantsPercentage?.toString() ?? "30",
+      savings: existingMonth.savingsPercentage?.toString() ?? "20",
+    });
+  }, [existingMonth]);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const needs = Number(form.needs) || 0;
+  const wants = Number(form.wants) || 0;
+  const savings = Number(form.savings) || 0;
+
+  const total = needs + wants + savings;
+
+  const incomeNum = Number(form.income) || 0;
+
+  const needsAmount = ((incomeNum * needs) / 100).toFixed(2);
+  const wantsAmount = ((incomeNum * wants) / 100).toFixed(2);
+  const savingsAmount = ((incomeNum * savings) / 100).toFixed(2);
+
+  const allAllocationsFilled =
+    form.needs !== "" && form.wants !== "" && form.savings !== "";
+
+  const isNonNegative =
+    needs >= 0 && wants >= 0 && savings >= 0 && incomeNum >= 0;
+
+  const isValidAllocation =
+    total === 100 && allAllocationsFilled && isNonNegative;
+
+  const isValidIncome = form.income !== "";
+
+  const isFormValid = isValidAllocation && isValidIncome;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!isFormValid) return;
+
+    const payload = {
+      income: Number(form.income),
+      needsPercentage: needs,
+      wantsPercentage: wants,
+      savingsPercentage: savings,
+      year: Number(form.year),
+      month: Number(form.month),
+    };
+
+    onSubmit?.(payload);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+      <p className="text-sm">
+        Edit the details of an existing budget.{" "}
+        <a
+          className="underline text-secondary"
+          href="https://www.wealthsimple.com/en-ca/learn/50-30-20-rule"
+          target="_blank"
+        >
+          Learn more.
+        </a>
+      </p>
+      {/* Income */}
+      <div>
+        <label className="label">
+          <span className="label-text">Estimated Monthly Income ($)</span>
+        </label>
+        <input
+          name="income"
+          type="number"
+          className="input input-bordered w-full validator"
+          min="0"
+          required
+          value={form.income}
+          onChange={handleChange}
+          title={"Please enter a positive number"}
+        />
+      </div>
+
+      {/* Needs */}
+      <div>
+        <label className="label w-full">
+          <span className="label-text">Needs (%)</span>
+          <span className="label-text ml-auto">${needsAmount}</span>
+        </label>
+        <input
+          name="needs"
+          type="number"
+          className={`input input-bordered w-full validator`}
+          min="0"
+          max="100"
+          required
+          value={form.needs}
+          onChange={handleChange}
+          title={"Please enter a number between 0 and 100"}
+        />
+      </div>
+
+      {/* Wants */}
+      <div>
+        <label className="label w-full">
+          <span className="label-text">Wants (%)</span>
+          <span className="label-text ml-auto">${wantsAmount}</span>
+        </label>
+        <input
+          name="wants"
+          type="number"
+          className={`input input-bordered w-full validator`}
+          min="0"
+          max="100"
+          required
+          value={form.wants}
+          onChange={handleChange}
+          title={"Please enter a number between 0 and 100"}
+        />
+      </div>
+
+      {/* Savings */}
+      <div>
+        <label className="label w-full">
+          <span className="label-text">Savings (%)</span>
+          <span className="label-text ml-auto">${savingsAmount}</span>
+        </label>
+        <input
+          name="savings"
+          type="number"
+          className={`input input-bordered w-full validator`}
+          min="0"
+          max="100"
+          required
+          value={form.savings}
+          onChange={handleChange}
+          title={"Please enter a number between 0 and 100"}
+        />
+      </div>
+
+      {/* Allocation feedback */}
+      <p
+        className={`text-sm ${
+          isValidAllocation ? "text-success" : "text-error"
+        }`}
+      >
+        Total Allocation: {total}% (must equal 100%)
+      </p>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        className="btn btn-primary w-full"
+        disabled={!isFormValid}
+      >
+        Save Changes
+      </button>
+      <div>
+          <p className="text-error text-sm">Danger Zone</p>
+          <div className="border p-4 rounded-lg border-error">
+            <button
+              onClick={deleteOnClick}
+              type="button"
+              className="btn btn-error btn-sm"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+    </form>
+  );
+};
+
+export default EditMonthForm;

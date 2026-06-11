@@ -8,8 +8,11 @@ import TransactionCard from "../components/cards/TransactionCard";
 import ExpenseForm from "../components/forms/ExpenseForm";
 import ModalWrapper from "../components/modals/ModalWrapper";
 import ActionConfirmation from "../components/forms/ActionConfirmation";
+import EditMonthForm from "../components/forms/EditMonthForm";
+import { useNavigate } from "react-router-dom";
 
 const MonthlyDetails = () => {
+  const navigate = useNavigate();
   const {
     getMonthDetails,
     selectedMonthDetails,
@@ -57,7 +60,7 @@ const MonthlyDetails = () => {
         <p>Loading...</p>
       ) : (
         <div className="flex flex-col items-center gap-10">
-          <BudgetDetails data={selectedMonthDetails} />
+          <BudgetDetails data={selectedMonthDetails} onClick={() => {setActiveModal("editMonth")}}/>
           <h4 className="text-3xl font-bold">Transaction History</h4>
           <button
             onClick={() => setActiveModal("createTransaction")}
@@ -126,7 +129,8 @@ const MonthlyDetails = () => {
           ))
         )}
       </div>
-      {/* Forms */}
+
+      {/* Transaction Modals */}
       {activeModal === "createTransaction" && (
         <ModalWrapper
           title="Create Transaction"
@@ -180,12 +184,36 @@ const MonthlyDetails = () => {
             submitButtonText="Save Changes"
             isDeleteButtonShown={true}
             deleteOnClick={() => {
-              setActiveModal("deleteConfirmation");
+              setActiveModal("deleteTransactionConfirmation");
             }}
           />
         </ModalWrapper>
       )}
-      {activeModal === "deleteConfirmation" && (
+
+      {/* Month Details Modals */}
+      {activeModal === "editMonth" && (
+        <ModalWrapper
+          title="Edit Monthly Budget"
+          onClose={() => setActiveModal(null)}
+        >
+          <EditMonthForm
+            onSubmit={(payload) => {
+              setActiveModal(null);
+              editMonth({
+                monthId: selectedMonthDetails.id,
+                ...payload,
+              });
+            }}
+            existingMonth={selectedMonthDetails}
+            deleteOnClick={() => {
+              setActiveModal("deleteMonthConfirmation");
+            }}
+          />
+        </ModalWrapper>
+      )}
+
+      {/* Deletion confrimation modals */}
+      {activeModal === "deleteTransactionConfirmation" && (
         <ModalWrapper
           title="Are you sure you want to delete this transaction?"
           onClose={() => {
@@ -199,6 +227,27 @@ const MonthlyDetails = () => {
                 transactionId: selectedTransaction.id,
               });
               setActiveModal(null);
+            }}
+            noOnClick={() => {
+              setActiveModal(null);
+            }}
+          />
+        </ModalWrapper>
+      )}
+      {activeModal === "deleteMonthConfirmation" && (
+        <ModalWrapper
+          title="Are you sure you want to delete this monthly budget?"
+          onClose={() => {
+            setActiveModal(null);
+          }}
+        >
+          <ActionConfirmation
+            yesOnClick={() => {
+              deleteMonth({
+                monthId: selectedMonthDetails.id,
+              });
+              setActiveModal(null);
+              navigate("/");
             }}
             noOnClick={() => {
               setActiveModal(null);

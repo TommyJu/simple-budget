@@ -29,7 +29,7 @@ const ProgressBar = ({ label, spent, budget, remaining }) => {
   );
 };
 
-const BudgetDetails = ({ data }) => {
+const BudgetDetails = ({ data, onClick }) => {
   const categories = [
     {
       label: "Needs",
@@ -52,7 +52,7 @@ const BudgetDetails = ({ data }) => {
   ];
 
   return (
-    <div className="w-full p-8 border rounded-lg bg-base-200 hover:border-secondary">
+    <div onClick={onClick} className="w-full p-8 border rounded-lg bg-base-200 hover:border-secondary">
       <div className="mb-8 text-xl">
         <strong>Estimated Income:</strong> ${data.income}
       </div>
