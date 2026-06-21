@@ -11,6 +11,8 @@ export const setJwtCookie = (userId, res) => {
         { expiresIn: `${TOKEN_LIFESPAN_IN_DAYS}d` }
     );
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie(
         "jwt",
         token, 
@@ -18,10 +20,9 @@ export const setJwtCookie = (userId, res) => {
             maxAge: TOKEN_LIFESPAN_IN_DAYS * MILLISECONDS_IN_ONE_DAY,
             // Prevents XSS attacks
             httpOnly: true,
-            // Prevents CSRF attacks
-            sameSite: "strict",
+            sameSite: isProduction ? "none" : "strict",
             // During development, localhost uses http. The final production app will use https instead.
-            secure: process.env.NODE_ENV !== "development"
+            secure: isProduction
         }
     );
 };
