@@ -46,6 +46,19 @@ export const createAndSaveUser = async (username, hashedPassword) => {
     return newUserId;
 };
 
+export const getUserById = async (userId) => {
+  const query = "SELECT id, username FROM users WHERE id = $1";
+  const values = [userId];
+
+  const result = await pool.query(query, values);
+
+  if (result.rowCount === 0) {
+    throw new AppError("User not found", 404);
+  }
+
+  return result.rows[0];
+};
+
 // HELPER FUNCTIONS
 
 const checkEmptyFields = (username, password) => {

@@ -28,11 +28,11 @@ function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   const { selectedMonthId } = useMonthStore();
 
-  if (isCheckingAuth && !authUser) {
+  if (isCheckingAuth) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader className="size-6 animate-spin" />

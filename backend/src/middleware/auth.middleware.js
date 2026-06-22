@@ -5,8 +5,17 @@ import { AppError } from "../utils/errorHandling.js";
 // Verifies the user's auth token and saves userId for subsequent requests
 export const protectRoute = async (req, res, next) => {
   try {
-    const authToken = req.cookies.jwt;
-    const userId = await findUserIdUsingAuthToken(authToken);
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      throw new AppError("Unauthorized, no token provided.", 401);
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    const userId = await findUserId(decodedToken);
 
     req.userId = userId;
     next();
