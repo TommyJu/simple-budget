@@ -47,7 +47,9 @@ const useMonthStore = create((set, get) => ({
   getMonthDetails: async () => {
     set({ isMonthsLoading: true });
     try {
-      const response = await monthService.getMonthDetails({ monthId: get().selectedMonthId });
+      const response = await monthService.getMonthDetails({
+        monthId: get().selectedMonthId,
+      });
       set({
         selectedMonthDetails: response.data,
       });
@@ -77,10 +79,17 @@ const useMonthStore = create((set, get) => ({
   deleteMonth: async (monthId) => {
     set({ isMonthsLoading: true });
     try {
-      const response = await monthService.deleteMonth({ monthId: get().selectedMonthId });
-  
-      set({selectedMonthDetails: null});
-      set({selectedMonthId: null});
+      const response = await monthService.deleteMonth({
+        monthId: get().selectedMonthId,
+      });
+
+      set((state) => ({
+        monthOverviews: state.monthOverviews.filter(
+          (overview) => overview.id !== get().selectedMonthId,
+        ),
+      }));
+      set({ selectedMonthDetails: null });
+      set({ selectedMonthId: null });
       toast.success("Month deleted successfully");
     } catch (error) {
       handleToastErrorMessage(error, "Failed to delete month");
