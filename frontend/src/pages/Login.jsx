@@ -7,6 +7,7 @@ import {
   MAX_USERNAME_LENGTH,
 } from "@/constants/auth";
 import { Loader2 } from "lucide-react";
+import Coin from "../components/animations/Coin";
 
 export const Login = () => {
   const { login, isLoggingIn } = useAuthStore();
@@ -22,14 +23,7 @@ export const Login = () => {
   return (
     <div className="flex flex-col justify-center items-center p-4 sm:p-8 min-h-dvh">
       <div className="flex flex-col items-center mb-12">
-        <video
-          src="/coin.webm"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-30 sm:w-40 h-auto"
-        />
+        <Coin />
         <h1 className="indie-flower-regular text-6xl sm:text-7xl text-primary text-center">
           Simple Budget
         </h1>

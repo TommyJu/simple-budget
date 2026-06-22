@@ -1,15 +1,10 @@
+import Coin from "../components/animations/Coin";
+
 const Landing = () => {
   return (
     <div className="flex flex-col justify-center items-center p-4">
       <div className="flex flex-col items-center mb-12">
-        <video
-          src="/coin.webm"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-40 h-auto "
-        />
+        <Coin />
         <h1 className="indie-flower-regular text-7xl text-primary text-center">
           Simple Budget
         </h1>
